@@ -3,6 +3,7 @@
 !/*.md
 !/*.bat
 
+!/.clang-format
 !/.gitattributes
 !/.gitignore
 !/LICENSE
