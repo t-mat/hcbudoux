@@ -4,14 +4,14 @@
 .PHONY: codegen examples test
 
 #
-all: clean codegen test example
+all: clean codegen test examples
 
 clean:
 	$(MAKE) -C codegen  clean
 	$(MAKE) -C examples clean
 	$(MAKE) -C test     clean
 
-run: test example
+run: test examples
 
 clang-format:
 	$(MAKE) -C codegen  clang-format
