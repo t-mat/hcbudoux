@@ -1,0 +1,1 @@
+@call "%~dp0test\run.bat" && call "%~dp0examples\run.bat"

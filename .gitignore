@@ -1,0 +1,17 @@
+/*
+
+!/*.md
+!/*.bat
+
+!/.gitattributes
+!/.gitignore
+!/LICENSE
+!/Makefile
+
+!/codegen/
+!/doc/
+!/examples/
+!/include/
+!/script/
+!/test/
+!/third_party/
