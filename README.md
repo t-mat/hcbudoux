@@ -190,14 +190,14 @@ hcbudoux uses the following BudouX models, C standards, headers, types and const
 Shortcut for development tasks
 ------------------------------
 
-| Task                                  | Linux                 | Windows                                               |
-| ---                                   | ---                   | ---                                                   |
-| Run codegen, test and examples        | `make all`            | `.\codegen\run.bat && .\test\run.bat && .\run.bat`    |
-| Run codegen                           | `make codegen`        | `.\codegen\run.bat`                                   |
-| Run test                              | `make test`           | `.\run.bat`                                           |
-| Run examples                          | `make example`        | `.\test\run.bat`                                      |
-| Run clang-format                      | `make clang-format`   | -                                                     |
-| Run clang-tidy                        | `make clang-tidy`     | -                                                     |
+| Task                                  | Linux                 | Windows                               |
+| ---                                   | ---                   | ---                                   |
+| Run codegen, test and examples        | `make all`            | `.\codegen\run.bat && .\run.bat`      |
+| Run codegen                           | `make codegen`        | `.\codegen\run.bat`                   |
+| Run test                              | `make test`           | `.\test\run.bat`                      |
+| Run examples                          | `make examples`       | `.\examples\run.bat`                  |
+| Run clang-format                      | `make clang-format`   | -                                     |
+| Run clang-tidy                        | `make clang-tidy`     | -                                     |
 
 
 Third party libraries
