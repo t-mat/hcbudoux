@@ -76,9 +76,9 @@
 // SPDX-License-Identifier: CC0-1.0
 //
 // "hcbudoux.h" by Takayuki Matsuoka.
-// To the extent possible under law, the person who associated CC0-1.0 with
-// "hcbudoux.h". See https://creativecommons.org/publicdomain/zero/1.0/ for
-// CC0-1.0 legalcode.
+// To the extent possible under law, the person who associated CC0-1.0 with "hcbudoux.h"
+// has waived all copyright and related or neighboring rights to "hcbudoux.h".
+// See https://creativecommons.org/publicdomain/zero/1.0/ for CC0-1.0 legalcode.
 
 #ifndef HCBUDOUX_H_INCLUDED
 #define HCBUDOUX_H_INCLUDED 1

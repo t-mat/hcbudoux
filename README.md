@@ -238,6 +238,7 @@ License
 ```
 "hcbudoux" by Takayuki Matsuoka.
 
-To the extent possible under law, the person who associated CC0-1.0 with "hcbudoux".
+To the extent possible under law, the person who associated CC0-1.0 with "hcbudoux"
+has waived all copyright and related or neighboring rights to "hcbudoux".
 See https://creativecommons.org/publicdomain/zero/1.0/ for CC0-1.0 legalcode.
 ```
