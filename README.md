@@ -10,8 +10,8 @@ Prerequisites
 - C11 compatible C/C++ compiler (clang, gcc, MSVC)
 
 
-Install and usage
------------------
+Installation and usage
+----------------------
 
 - Copy `include/hcbudoux.h` to your project.
 - Follow the stb-style header-only library convention. Therefore, you should do this:
@@ -133,14 +133,14 @@ Public API
 ```C
 struct hcbudoux_ctx;   // Parser context. (All members are private)
 struct hcbudoux_span { // String view
-  int offset;          // Public member: offset in bytes.
-  int length;          // Public member: length in bytes.
+  int32_t offset;      // Public member: offset in bytes.
+  int32_t length;      // Public member: length in bytes.
 };
 
 // Initialize a parser context with a UTF-8 string.
-// utf8_str is encoded in UTF-8.  The lifetime of utf8_str is longer than hcbudoux_ctx.
+// utf8_str is encoded in UTF-8.  utf8_str must outlive hcbudoux_ctx.
 // We don't need to "close" hcbudoux_ctx since it doesn't allocate dynamic resources.
-void hcbudoux_init (hcbudoux_ctx *ctx, const void *utf8_str, int utf8_str_size_in_bytes);
+void hcbudoux_init (hcbudoux_ctx *ctx, const void *utf8_str, int32_t utf8_str_size_in_bytes);
 
 // Get the next string view of the specific language.
 // Returns false when the parser reaches the end of utf8_str.
@@ -157,7 +157,7 @@ Details
 -------
 
 There are compile-time configuration macros.  You can specify which model(s) you will use.
-If all symbols are not defined, `hcbudoux.h` includes all available models.
+If none of the symbols are defined, `hcbudoux.h` includes all available models.
 
 ```C
 #define HCBUDOUX_IMPLEMENTATION 1
@@ -171,18 +171,18 @@ If all symbols are not defined, `hcbudoux.h` includes all available models.
 
 hcbudoux uses the following BudouX models, C standards, headers, types and constants:
 
-| -                                     | -                                             |
-| ---                                   | ---                                           |
-| C language standard                   | C11                                           |
-| Prefix of C-language symbols          | `hcbudoux_`                                   |
-| Prefix of C-preprocessor symbols      | `HCBUDOUX_`                                   |
-| BudouX version                        | `v0.6.4`, [1f20187](https://github.com/google/budoux/commit/1f201873ccaf38cd318a2c4f07ae9f8b88a1f315) |
-| BudouX natural language models        | ja, ja_knbc, th, zh-hans, zh-hant             |
-| Standard header dependencies          | `<stdint.h>` <br> `<stdbool.h>`               |
-| `<stdint.h>` types in use             | `uint8_t`, `uint32_t`, `uint64_t`             |
-| `<stdbool.h>` types in use            | `bool`, `true`, `false`                       |
-| Standard library binary dependencies  |  No dependency.                               |
-| External resource allocation          |  No heap memory allocation, I/O, callback.    |
+| -                                     | -                                                                |
+| ---                                   | ---                                                              |
+| C language standard                   | C11                                                              |
+| Prefix of C-language symbols          | `hcbudoux_`                                                      |
+| Prefix of C-preprocessor symbols      | `HCBUDOUX_`                                                      |
+| BudouX version                        | [`v0.7.0`](https://github.com/google/budoux/releases/tag/v0.7.0) |
+| BudouX natural language models        | ja, ja_knbc, th, zh-hans, zh-hant                                |
+| Standard header dependencies          | `<stdint.h>` <br> `<stdbool.h>`                                  |
+| `<stdint.h>` types in use             | `uint8_t`, `uint32_t`, `uint64_t`                                |
+| `<stdbool.h>` types in use            | `bool`, `true`, `false`                                          |
+| Standard library binary dependencies  |  No dependency.                                                  |
+| External resource allocation          |  No heap memory allocation, I/O, callback.                       |
 
 [doc/codegen.md](doc/codegen.md) describes the details of `codegen` and `hcbudoux.h`.
 
@@ -225,7 +225,7 @@ You can download them with the following scripts
 Alternatives
 ------------
 
-There're alternative line break libraries:
+There are alternative line break libraries:
 [BudouX](https://github.com/google/budoux/),
 [TinySegmenter](http://www.chasen.org/~taku/software/TinySegmenter/),
 [TinySegmenterMaker](https://github.com/shogo82148/TinySegmenterMaker/),

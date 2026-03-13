@@ -31,5 +31,5 @@ codegen: codegen.cpp
 codegen-run: codegen
 	./$^
 
-$(ODIR)/%.o: %.cpp
+%.o: %.cpp
 	$(CXX) -c -o $@ $< $(CXXFLAGS)

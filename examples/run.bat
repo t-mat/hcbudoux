@@ -1,6 +1,6 @@
 @echo off && setlocal EnableDelayedExpansion && cd /d "%~dp0" && call "%~dp0..\script\intro.bat"
 
-set "Options=/std:c++20 /O2 /EHsc /I ..\include"
+set "Options=/std:c11 /O2 /I ..\include"
 
 echo %MSVC% %Options% example1.c
 call %MSVC% %Options% example1.c   || goto :ERROR

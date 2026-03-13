@@ -3,6 +3,7 @@
 #endif
 #include <json.h>  // https://github.com/sheredom/json.h/blob/master/json.h
 
+#include <cinttypes>
 #include <map>
 #include <string>
 #include <vector>
@@ -83,6 +84,9 @@ Model loadModel(const std::string &json) {
             }
           }
         }
+        if (utf32_char_size_in_bytes == 0) {
+          break;
+        }
         if (utf32_char == 0) {
           break;
         }
@@ -109,6 +113,9 @@ Model loadModel(const std::string &json) {
   Model model;
 
   json_value_s *const root = json_parse(json.data(), json.size());
+  if (!root) {
+    return model;
+  }
   const json_object_s *object = json_value_as_object(root);
 
   //  Structure of BudouX model JSON file:
@@ -134,7 +141,7 @@ Model loadModel(const std::string &json) {
       if (!value) {
         continue;
       }
-      if (value && value->type != json_type_number) {
+      if (value->type != json_type_number) {
         continue;
       }
       std::string const elemName(p->name->string, p->name->string + p->name->string_size);
@@ -168,11 +175,11 @@ TextTemplate::Dictionary generateTemplateDictionary() {
     char buf[64];
     switch (tableName[0]) {
       case 'U':
-        sprintf(buf, "0x%08x", static_cast<uint32_t>(encoded));
+        snprintf(buf, sizeof(buf), "0x%08x", static_cast<uint32_t>(encoded));
         return buf;
       case 'B':  // fallthrough
       case 'T':
-        sprintf(buf, "UINT64_C(0x%016" PRIx64 ")", encoded);
+        snprintf(buf, sizeof(buf), "UINT64_C(0x%016" PRIx64 ")", encoded);
         return buf;
       default:
         return "";
@@ -181,7 +188,7 @@ TextTemplate::Dictionary generateTemplateDictionary() {
 
   const auto itemScoreToString = [](int score) -> std::string {
     char buf[64];
-    sprintf(buf, "%+6d", score);
+    snprintf(buf, sizeof(buf), "%+6d", score);
     return buf;
   };
 
@@ -190,7 +197,7 @@ TextTemplate::Dictionary generateTemplateDictionary() {
   for (const Language &language : languages) {
     std::string const jsonFilename = "../third_party/budoux/budoux/models/" + language.jsonFilename;
     std::string const json = readFile(jsonFilename);
-    Model const model = loadModel({json.data(), strlen(json.data())});
+    Model const model = loadModel({json.data(), json.size()});
     int baseScore = 0;
 
     for (auto const &table : model) {
@@ -233,13 +240,20 @@ TextTemplate::Dictionary generateTemplateDictionary() {
 bool generate() {
   std::string const templateFilename = "./hcbudoux.template.h";
   std::string const outFilename = "../include/hcbudoux.h";
-  std::string const outStr = TextTemplate::replaceAll(readFile(templateFilename), generateTemplateDictionary());
+  TextTemplate::Dictionary const templateMap = generateTemplateDictionary();
+  if (templateMap.empty()) {
+    return false;
+  }
+  std::string const outStr = TextTemplate::replaceAll(readFile(templateFilename), templateMap);
   FILE *fp = fopen(outFilename.c_str(), "wb");
   if (!fp) {
     return false;
   }
-  fwrite(outStr.data(), sizeof(outStr[0]), outStr.size(), fp);
+  size_t const written = fwrite(outStr.data(), sizeof(outStr[0]), outStr.size(), fp);
   fclose(fp);
+  if (written != outStr.size()) {
+    return false;
+  }
   return true;
 }
 

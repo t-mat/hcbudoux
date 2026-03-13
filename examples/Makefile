@@ -34,5 +34,5 @@ example2: example2.o
 example2-run: example2
 	./$^
 
-$(ODIR)/%.o: %.c ../include/hcbudoux.h
+%.o: %.c ../include/hcbudoux.h
 	$(CC) -c -o $@ $< $(CFLAGS)

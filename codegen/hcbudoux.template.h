@@ -1,7 +1,7 @@
 // hcbudoux.h
 // ==========
 //
-// Header-only C11 implementation of BudouX line break library for Chinese, Japanese and Thai language.
+// Header-only C11 implementation of BudouX line break library for Chinese, Japanese, and Thai languages.
 //
 //
 // Usage
@@ -24,6 +24,7 @@
 // MSVC: cl.exe /utf-8 /nologo -I include example1.c
 //
 //     ```C
+//     // example.c
 //     #define HCBUDOUX_IMPLEMENTATION
 //     #include "hcbudoux.h"
 //     #include <assert.h> // static_assert
@@ -105,24 +106,24 @@ enum {
 typedef struct hcbudoux_ctx {
   struct {
     const uint8_t *utf8_str;
-    int utf8_str_size_in_bytes;
-    int curr_index;
-    int last_index;
+    int32_t utf8_str_size_in_bytes;
+    int32_t curr_index;
+    int32_t last_index;
     uint32_t utf32s[6];
-    int indices[6];
+    int32_t indices[6];
   } impl;
 } hcbudoux_ctx;
 
 typedef struct hcbudoux_span {
-  int offset;  // public member: Offset in bytes from the beginning of utf8_str.
-  int length;  // public member: Length in bytes.
+  int32_t offset;  // public member: Offset in bytes from the beginning of utf8_str.
+  int32_t length;  // public member: Length in bytes.
 } hcbudoux_span;
 
 // Initialize a parser context with a UTF-8 string.
-// utf8_str is encoded in UTF-8.  The lifetime of utf8_str is longer than hcbudoux_ctx.
+// utf8_str is encoded in UTF-8.  utf8_str must outlive hcbudoux_ctx.
 // We don't need to "close" hcbudoux_ctx since it doesn't allocate dynamic resources.
 // hcbudoux doesn't require that utf8_str is terminated with '\0'.
-void hcbudoux_init(hcbudoux_ctx *ctx, const void *utf8_str, int utf8_str_size_in_bytes);
+void hcbudoux_init(hcbudoux_ctx *ctx, const void *utf8_str, int32_t utf8_str_size_in_bytes);
 
 // Get the next string view of the specific language.
 // Returns false when the parser reaches the end of utf8_str.
@@ -162,9 +163,9 @@ bool hcbudoux_getnext_zh_hant(hcbudoux_ctx *ctx, hcbudoux_span *span);
 //
 // Public API : Initialize
 //
-void hcbudoux_init(hcbudoux_ctx *ctx, const void *utf8_str, int utf8_str_size_in_bytes) {
+void hcbudoux_init(hcbudoux_ctx *ctx, const void *utf8_str, int32_t utf8_str_size_in_bytes) {
   ctx->impl.utf8_str = (const uint8_t *)utf8_str;
-  ctx->impl.utf8_str_size_in_bytes = utf8_str_size_in_bytes;
+  ctx->impl.utf8_str_size_in_bytes = utf8_str_size_in_bytes < 0 ? 0 : utf8_str_size_in_bytes;
   ctx->impl.curr_index = 0;
   ctx->impl.last_index = 0;
   for (int i = 0, n = (int)(sizeof(ctx->impl.utf32s) / sizeof(ctx->impl.utf32s[0])); i < n; ++i) {
@@ -202,6 +203,9 @@ typedef struct hcbudoux_impl_item3 {
 } hcbudoux_impl_item3;
 
 static int hcbudoux_impl_find1(const hcbudoux_impl_item1 *base, int len, uint32_t x) {
+  if (len <= 0) {
+    return 0;
+  }
   while (len > 1) {
     int const half = len / 2;
     base += (base[half - 1].var < x) * half;
@@ -211,6 +215,9 @@ static int hcbudoux_impl_find1(const hcbudoux_impl_item1 *base, int len, uint32_
 }
 
 static int hcbudoux_impl_find2(const hcbudoux_impl_item2 *base, int len, uint32_t x0, uint32_t x1) {
+  if (len <= 0) {
+    return 0;
+  }
   uint64_t const x = ((uint64_t)x1) | (((uint64_t)x0) << 21);
   while (len > 1) {
     int const half = len / 2;
@@ -221,6 +228,9 @@ static int hcbudoux_impl_find2(const hcbudoux_impl_item2 *base, int len, uint32_
 }
 
 static int hcbudoux_impl_find3(const hcbudoux_impl_item3 *base, int len, uint32_t x0, uint32_t x1, uint32_t x2) {
+  if (len <= 0) {
+    return 0;
+  }
   uint64_t const x = ((uint64_t)x2) | (((uint64_t)x1) << 21) | (((uint64_t)x0) << 42);
   while (len > 1) {
     int const half = len / 2;
@@ -524,6 +534,11 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
       }
     }
 
+    // Advance at least 1 byte on invalid UTF-8
+    if (new_utf32_char_size_in_bytes == 0) {
+      new_utf32_char_size_in_bytes = 1;
+    }
+
     // Add new UTF32 character to the queue
     ctx->impl.utf32s[0] = ctx->impl.utf32s[1];
     ctx->impl.utf32s[1] = ctx->impl.utf32s[2];
@@ -571,18 +586,12 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
           break;
         }
 
-        // If we have the last valid chunk, return it before entering EOF state.
-        if (length > 0 && start < ctx->impl.utf8_str_size_in_bytes) {
-          // Set EOF state for next time.  Make sure we won't process further.
-          span->offset = start;
-          span->length = length;
-          ctx->impl.curr_index = ctx->impl.utf8_str_size_in_bytes;
-          ctx->impl.last_index = ctx->impl.utf8_str_size_in_bytes;
-          return true;  // true indicates valid span
-        }
-
-        // There's nothing to do.  Return empty span.
-        break;
+        // Return the last valid chunk before entering EOF state.
+        span->offset = start;
+        span->length = length;
+        ctx->impl.curr_index = ctx->impl.utf8_str_size_in_bytes;
+        ctx->impl.last_index = ctx->impl.utf8_str_size_in_bytes;
+        return true;  // true indicates valid span
       }
     }
   }
@@ -625,7 +634,7 @@ bool hcbudoux_getnext_zh_hant(hcbudoux_ctx *ctx, hcbudoux_span *span) {
   return hcbudoux_impl_getnext(ctx, span, hcbudoux_impl_lang_zh_hant);
 }
 #endif
-#endif  // defined(HCBUDOUX_IMPL)
+#endif  // defined(HCBUDOUX_IMPLEMENTATION)
 
 #ifdef __cplusplus
 }  // extern "C"

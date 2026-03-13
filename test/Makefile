@@ -17,7 +17,7 @@ clean:
 	rm -f ./*.o test1 test2
 
 clang-format:
-	clang-format -i test1.c
+	clang-format -i test1.c test2.cpp
 
 clang-tidy:
 	clang-tidy test1.c -- $(CFLAGS)
@@ -34,8 +34,11 @@ test1: test1.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 test2: test2.o
-	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
-$(ODIR)/%.o: %.c ../include/hcbudoux.h
+%.o: %.c ../include/hcbudoux.h
 	$(CC) -c -o $@ $< $(CFLAGS)
+
+%.o: %.cpp ../include/hcbudoux.h
+	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
