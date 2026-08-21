@@ -104,28 +104,6 @@ Because Japanese text doesn't have explicit word separators/spaces.
 To solve (ease) this issue, BudouX gives clues for word separation.
 See also: [BudouX - Background](https://github.com/google/budoux?tab=readme-ov-file#background)
 
-Note that BudouX models are not perfect.  They may fail to estimate a line break position.
-
-For example, `test/test1.c` contains a "bad result" in Japanese `除かなければならぬと決意した。`.
-
-Actual output of BudouX is
-
-```
-# NG
-除かなければなら  
-ぬと  
-決意した。
-```
-
-But `ならぬ` is a single word.  So it should be
-
-```
-# OK
-除かなければ  
-ならぬと  
-決意した。
-```
-
 
 Public API
 ----------
