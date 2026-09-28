@@ -46,16 +46,17 @@ void init(void) {}
 int main(int argc, const char **argv) {
     static char const utf8_str[]  = u8"次の決闘がまもなく始まる！";
     int const         utf8_strlen = (int)strlen(utf8_str);
+
+    static_assert(sizeof(utf8_str) == 40, "Basic UTF-8 test");
     init();
 
     hcbudoux_ctx ctx;
     hcbudoux_init(&ctx, utf8_str, utf8_strlen);
-    static_assert(sizeof(utf8_str) == 40, "Basic UTF-8 test");
 
     hcbudoux_span span;
     while (hcbudoux_getnext_ja(&ctx, &span)) {
         const char *p = utf8_str + span.offset;
-        int         n = span.length;
+        const int   n = span.length;
         printf("'%.*s'\n", n, p);
     }
     // We don't need to "close" hcbudoux_ctx.

@@ -38,7 +38,7 @@ int main(int argc, const char **argv) {
   hcbudoux_span span;
   while (hcbudoux_getnext_ja(&ctx, &span)) {
     const char *p = utf8Str + span.offset;
-    int n = span.length;
+    const int n = span.length;
     printf("'%.*s'\n", n, p);
   }
   // We don't need to "close" hcbudoux_ctx.
