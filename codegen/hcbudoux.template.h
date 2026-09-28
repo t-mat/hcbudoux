@@ -172,7 +172,7 @@ void hcbudoux_init(hcbudoux_ctx *ctx, const void *utf8_str, int32_t utf8_str_siz
     ctx->impl.utf32s[i] = 0;
   }
   for (int i = 0, n = (int)(sizeof(ctx->impl.indices) / sizeof(ctx->impl.indices[0])); i < n; ++i) {
-    ctx->impl.indices[i] = 0;
+    ctx->impl.indices[i] = -1;  // -1 : slot not filled yet
   }
 }
 
@@ -524,7 +524,7 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
           // 11110uvv 10vvwwww 10xxxxyy 10yyzzzz
           //
           // |         |         |         |         |
-          // |0000 0000|000u vvvv|wwww xxxx|yyyy zzzz|    [0x010000,0x01ffff]
+          // |0000 0000|000u vvvv|wwww xxxx|yyyy zzzz|    [0x010000,0x10ffff]
           uint32_t const p0 = (c0 & 0x07) << 18;
           uint32_t const p1 = (c1 & 0x3f) << 12;
           uint32_t const p2 = (c2 & 0x3f) << 6;
@@ -563,8 +563,11 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
       int const end = ctx->impl.indices[3];
       int const length = end - start;
 
-      // utf32s[3] represents 0 offset (current) character.
-      if (ctx->impl.utf32s[3] != 0) {
+      // indices[3] (end) is the byte offset of the current character (utf32s[3]).
+      // -1 means the slot has not been filled yet; an offset past the end means EOF padding.
+      // The code point itself is not tested here, so U+0000 and invalid bytes (which decode
+      // to 0) are scored like any other character.  No model key contains U+0000.
+      if (end >= 0 && end < ctx->impl.utf8_str_size_in_bytes) {
         // Queue contains valid input.
 
         // Evaluate queue
@@ -581,7 +584,7 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
         span->length = length;
         ctx->impl.last_index = end;
         return true;  // true indicates valid span
-      } else if (ctx->impl.indices[3] >= ctx->impl.utf8_str_size_in_bytes) {
+      } else if (end >= ctx->impl.utf8_str_size_in_bytes) {
         // Queue is empty. (index exceeded the last character)
 
         if (length <= 0 || start >= ctx->impl.utf8_str_size_in_bytes) {
