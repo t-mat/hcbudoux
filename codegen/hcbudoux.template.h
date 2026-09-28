@@ -249,16 +249,18 @@ static int hcbudoux_impl_compute_score_from_tables(
     const hcbudoux_impl_item3 *tw2, int tw2_count, const hcbudoux_impl_item3 *tw3, int tw3_count,
     const hcbudoux_impl_item3 *tw4, int tw4_count, uint32_t utf32_prev3, uint32_t utf32_prev2, uint32_t utf32_prev1,
     uint32_t utf32_current, uint32_t utf32_next1, uint32_t utf32_next2) {
-  int const sum = hcbudoux_impl_find1(uw1, uw1_count, utf32_prev3) + hcbudoux_impl_find1(uw2, uw2_count, utf32_prev2) +
-                  hcbudoux_impl_find1(uw3, uw3_count, utf32_prev1) +
-                  hcbudoux_impl_find1(uw4, uw4_count, utf32_current) +
-                  hcbudoux_impl_find1(uw5, uw5_count, utf32_next1) + hcbudoux_impl_find1(uw6, uw6_count, utf32_next2) +
-                  hcbudoux_impl_find2(bw1, bw1_count, utf32_prev2, utf32_prev1) +
-                  hcbudoux_impl_find2(bw2, bw2_count, utf32_prev1, utf32_current) +
-                  hcbudoux_impl_find2(bw3, bw3_count, utf32_current, utf32_next1) +
-                  hcbudoux_impl_find3(tw1, tw1_count, utf32_prev3, utf32_prev2, utf32_prev1) +
-                  hcbudoux_impl_find3(tw2, tw2_count, utf32_prev2, utf32_prev1, utf32_current) +
-                  hcbudoux_impl_find3(tw3, tw3_count, utf32_prev1, utf32_current, utf32_next1) +
+  int const sum = hcbudoux_impl_find1(uw1, uw1_count, utf32_prev3) +                              //
+                  hcbudoux_impl_find1(uw2, uw2_count, utf32_prev2) +                              //
+                  hcbudoux_impl_find1(uw3, uw3_count, utf32_prev1) +                              //
+                  hcbudoux_impl_find1(uw4, uw4_count, utf32_current) +                            //
+                  hcbudoux_impl_find1(uw5, uw5_count, utf32_next1) +                              //
+                  hcbudoux_impl_find1(uw6, uw6_count, utf32_next2) +                              //
+                  hcbudoux_impl_find2(bw1, bw1_count, utf32_prev2, utf32_prev1) +                 //
+                  hcbudoux_impl_find2(bw2, bw2_count, utf32_prev1, utf32_current) +               //
+                  hcbudoux_impl_find2(bw3, bw3_count, utf32_current, utf32_next1) +               //
+                  hcbudoux_impl_find3(tw1, tw1_count, utf32_prev3, utf32_prev2, utf32_prev1) +    //
+                  hcbudoux_impl_find3(tw2, tw2_count, utf32_prev2, utf32_prev1, utf32_current) +  //
+                  hcbudoux_impl_find3(tw3, tw3_count, utf32_prev1, utf32_current, utf32_next1) +  //
                   hcbudoux_impl_find3(tw4, tw4_count, utf32_current, utf32_next1, utf32_next2);
   return base_score + 2 * sum;
 }
