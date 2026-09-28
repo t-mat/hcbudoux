@@ -87,7 +87,7 @@ int computeStringWidth(const void *utf8_str, int utf8_str_size_in_bytes) {
           // 11110uvv 10vvwwww 10xxxxyy 10yyzzzz
           //
           // |         |         |         |         |
-          // |0000 0000|000u vvvv|wwww xxxx|yyyy zzzz|    [0x010000,0x01ffff]
+          // |0000 0000|000u vvvv|wwww xxxx|yyyy zzzz|    [0x010000,0x10ffff]
           uint32_t const p0 = (c0 & 0x07) << 18;
           uint32_t const p1 = (c1 & 0x3f) << 12;
           uint32_t const p2 = (c2 & 0x3f) << 6;
@@ -96,6 +96,11 @@ int computeStringWidth(const void *utf8_str, int utf8_str_size_in_bytes) {
           new_utf32_char = code_point;
           new_utf32_char_size_in_bytes = 4;
         }
+      }
+
+      // Advance at least 1 byte on invalid UTF-8
+      if (new_utf32_char_size_in_bytes == 0) {
+        new_utf32_char_size_in_bytes = 1;
       }
 
       index += new_utf32_char_size_in_bytes;
