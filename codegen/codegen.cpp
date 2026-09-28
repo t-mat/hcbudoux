@@ -2,6 +2,8 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #endif
 #include <json.h>  // https://github.com/sheredom/json.h/blob/master/json.h
+#include <stdio.h>
+#include <stdlib.h>
 
 #include <cinttypes>
 #include <map>
@@ -117,6 +119,9 @@ Model loadModel(const std::string &json) {
     return model;
   }
   const json_object_s *object = json_value_as_object(root);
+  if (!object) {
+    return model;
+  }
 
   //  Structure of BudouX model JSON file:
   //  {
@@ -136,6 +141,10 @@ Model loadModel(const std::string &json) {
     const json_object_element_s *const table = topElem;
     std::string const tableName(table->name->string, table->name->string + table->name->string_size);
     const json_object_s *const tableObject = json_value_as_object(table->value);
+    if (!tableObject) {
+      model = {};
+      break;
+    }
     for (const json_object_element_s *p = tableObject->start; p; p = p->next) {
       const json_value_s *const value = p->value;
       if (!value) {
@@ -197,6 +206,10 @@ TextTemplate::Dictionary generateTemplateDictionary() {
   for (const Language &language : languages) {
     std::string const jsonFilename = "../third_party/budoux/budoux/models/" + language.jsonFilename;
     std::string const json = readFile(jsonFilename);
+    if (json.empty()) {
+      fprintf(stderr, "Failed to load %s\n", jsonFilename.c_str());
+      return {};
+    }
     Model const model = loadModel({json.data(), json.size()});
     int baseScore = 0;
 
@@ -245,6 +258,9 @@ bool generate() {
     return false;
   }
   std::string const outStr = TextTemplate::replaceAll(readFile(templateFilename), templateMap);
+  if (outStr.empty()) {
+    return false;
+  }
   FILE *fp = fopen(outFilename.c_str(), "wb");
   if (!fp) {
     return false;
