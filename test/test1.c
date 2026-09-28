@@ -130,7 +130,7 @@ static bool test_all(void) {
           u8"メロスは\0"
           u8"激怒した。\0"
           u8"必ず、\0"
-		  u8"かの\0"
+          u8"かの\0"
           u8"邪智暴虐(じゃちぼうぎゃく\0"
           u8")の\0"
           u8"王を\0"
@@ -378,7 +378,6 @@ static bool test_public_api(void) {
     hcbudoux_ctx ctx;
     hcbudoux_span span;
     static char const str[] = u8"次の決闘がまもなく始まる！";
-    hcbudoux_init(&ctx, str, (int32_t)strlen(str));
     result &= test(hcbudoux_impl_lang_ja, str,
                    u8"次の\0"
                    u8"決闘が\0"
