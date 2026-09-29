@@ -1,7 +1,7 @@
 // example1.c - Basic usage
 //
 // gcc : gcc -std=c11 -I include examples/example1.c && ./a.out
-// MSVC: .\script\cl-exe.bat /utf-8 /nologo -I include examples\example1.c && .\example1.exe
+// MSVC: .\scripts\cl-exe.bat /utf-8 /nologo -I include examples\example1.c && .\example1.exe
 
 #define HCBUDOUX_IMPLEMENTATION 1
 #define HCBUDOUX_USE_JA 1  // Use model : ja

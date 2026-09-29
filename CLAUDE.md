@@ -24,16 +24,18 @@ make clean
 Windows (MSVC, no make):
 
 ```bat
-.\codegen\run.bat && .\run.bat   # equivalent of `make all`
-.\codegen\run.bat                # codegen
-.\test\run.bat                   # tests
-.\examples\run.bat               # examples
-.\run.bat                        # tests + examples
-.\clang-format.bat               # same files and flags as `make clang-format`
-.\clang-tidy.bat                 # same files and flags as `make clang-tidy`
+.\run.bat                 # default target `run`: tests + examples (does NOT regenerate the header)
+.\run.bat all             # clean + codegen + tests + examples
+.\run.bat codegen         # regenerate include\hcbudoux.h
+.\run.bat test            # tests
+.\run.bat examples        # examples
+.\run.bat clang-format    # same files and flags as `make clang-format`
+.\run.bat clang-tidy      # same files and flags as `make clang-tidy`
+.\run.bat clean           # delete _tmp\*.obj and the .exe files
+.\run.bat codegen test    # several targets run in order, stopping at the first failure
 ```
 
-The `.bat` scripts locate Visual Studio via vswhere (`scripts/cl-exe.bat`, `scripts/intro.bat`), compile with `cl.exe /nologo /utf-8 /O2`, and write `.obj` files to `_tmp/`. They pass `/`-style switches to `cl.exe`, so run them from cmd.exe or PowerShell, not from a Cygwin/MSYS bash. `clang-format.bat` and `clang-tidy.bat` use a project-local LLVM that `scripts/_llvm-ensure.bat` downloads into `.llvm/` (ignored) on first use.
+`run.bat` takes the same target names as the Makefile. `codegen`, `test`, and `examples` delegate to `codegen\run.bat`, `test\run.bat`, and `examples\run.bat`, which remain usable on their own (like `make -C <dir>`). The `.bat` scripts locate Visual Studio via vswhere (`scripts/cl-exe.bat`, `scripts/intro.bat`), compile with `cl.exe /nologo /utf-8 /O2`, and write `.obj` files to `_tmp/`. They pass `/`-style switches to `cl.exe`, so run them from cmd.exe or PowerShell, not from a Cygwin/MSYS bash. The `clang-format` and `clang-tidy` targets use a project-local LLVM that `scripts/_llvm-ensure.bat` downloads into `.llvm/` (ignored) on first use.
 
 ### Running a single test binary
 

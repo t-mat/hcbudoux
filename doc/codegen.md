@@ -7,7 +7,7 @@ How to generate hcbudoux.h
   ```
 - Windows
   ```bat
-  .\codegen\run.bat
+  .\run.bat codegen
   ```
 
 

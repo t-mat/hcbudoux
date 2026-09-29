@@ -27,7 +27,7 @@ Example
 
 ```C
 // gcc : gcc -std=c11 -I include examples/example1.c && ./a.out
-// MSVC: .\script\cl-exe.bat /utf-8 /nologo -I include examples\example1.c && .\example1.exe
+// MSVC: .\scripts\cl-exe.bat /utf-8 /nologo -I include examples\example1.c && .\example1.exe
 #define HCBUDOUX_IMPLEMENTATION 1
 #define HCBUDOUX_USE_JA 1 // Use model : ja
 #include "hcbudoux.h"
@@ -173,12 +173,16 @@ Shortcut for development tasks
 
 | Task                                  | Linux                 | Windows                               |
 | ---                                   | ---                   | ---                                   |
-| Run codegen, test and examples        | `make all`            | `.\codegen\run.bat && .\run.bat`      |
-| Run codegen                           | `make codegen`        | `.\codegen\run.bat`                   |
-| Run test                              | `make test`           | `.\test\run.bat`                      |
-| Run examples                          | `make examples`       | `.\examples\run.bat`                  |
-| Run clang-format                      | `make clang-format`   | -                                     |
-| Run clang-tidy                        | `make clang-tidy`     | -                                     |
+| Run test and examples                 | `make`                | `.\run.bat`                           |
+| Clean, codegen, test and examples     | `make all`            | `.\run.bat all`                       |
+| Run codegen                           | `make codegen`        | `.\run.bat codegen`                   |
+| Run test                              | `make test`           | `.\run.bat test`                      |
+| Run examples                          | `make examples`       | `.\run.bat examples`                  |
+| Run clang-format                      | `make clang-format`   | `.\run.bat clang-format`              |
+| Run clang-tidy                        | `make clang-tidy`     | `.\run.bat clang-tidy`                |
+| Remove build outputs                  | `make clean`          | `.\run.bat clean`                     |
+
+`run.bat` accepts several targets and runs them in order, e.g. `.\run.bat codegen test`.
 
 
 Third party libraries
