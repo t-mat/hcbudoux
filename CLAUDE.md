@@ -29,9 +29,11 @@ Windows (MSVC, no make):
 .\test\run.bat                   # tests
 .\examples\run.bat               # examples
 .\run.bat                        # tests + examples
+.\clang-format.bat               # same files and flags as `make clang-format`
+.\clang-tidy.bat                 # same files and flags as `make clang-tidy`
 ```
 
-The `.bat` scripts locate Visual Studio via vswhere (`script/cl-exe.bat`, `script/intro.bat`), compile with `cl.exe /nologo /utf-8 /O2`, and write `.obj` files to `_tmp/`. They pass `/`-style switches to `cl.exe`, so run them from cmd.exe or PowerShell, not from a Cygwin/MSYS bash.
+The `.bat` scripts locate Visual Studio via vswhere (`scripts/cl-exe.bat`, `scripts/intro.bat`), compile with `cl.exe /nologo /utf-8 /O2`, and write `.obj` files to `_tmp/`. They pass `/`-style switches to `cl.exe`, so run them from cmd.exe or PowerShell, not from a Cygwin/MSYS bash. `clang-format.bat` and `clang-tidy.bat` use a project-local LLVM that `scripts/_llvm-ensure.bat` downloads into `.llvm/` (ignored) on first use.
 
 ### Running a single test binary
 
@@ -114,7 +116,7 @@ C++ sources (`codegen.cpp`, `test2.cpp`) use `-std=c++11` with the same set minu
 
 ## Code Style
 
-Google C style, 120-character column limit (see `.clang-format`). `make clang-format` formats the template, codegen, tests, and examples only, never `include/hcbudoux.h` or `examples/east_asian_width.h`. The test table in `test1.c` is wrapped in `// clang-format off`.
+Google C style, 120-character column limit (see `.clang-format`). Qualifiers are west const (`const T *p`, `static const T x[]`), enforced by `QualifierAlignment: Left`; pointers are right-aligned (`T *p`). `make clang-format` formats the template, codegen, tests, and examples only, never `include/hcbudoux.h` or `examples/east_asian_width.h`. The test table in `test1.c` is wrapped in `// clang-format off`.
 
 ## Repository Gotchas
 

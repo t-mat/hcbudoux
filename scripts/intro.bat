@@ -8,7 +8,7 @@ set "TmpDir=%ProjectRootDir%\_tmp\"
 
 if not exist "%TmpDir%" ( mkdir "%TmpDir%" )
 
-set "ClExeBat=%ProjectRootDir%\script\cl-exe.bat"
+set "ClExeBat=%ProjectRootDir%\scripts\cl-exe.bat"
 
 set "ClOptions=/nologo /utf-8 /Fo:%TmpDir%"
 

@@ -1,4 +1,4 @@
-@echo off && setlocal EnableDelayedExpansion && cd /d "%~dp0" && call "%~dp0..\script\intro.bat"
+@echo off && setlocal EnableDelayedExpansion && cd /d "%~dp0" && call "%~dp0..\scripts\intro.bat"
 
 set "COptions=/std:c11 /O2 /I ..\include"
 set "CxxOptions=/std:c++14 /O2 /EHsc /I ..\include"
