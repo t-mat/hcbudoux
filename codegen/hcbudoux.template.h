@@ -42,8 +42,8 @@
 //     #endif
 //
 //     int main(int argc, const char **argv) {
-//         static char const utf8Str[]  = u8"次の決闘がまもなく始まる！";
-//         int const         utf8Strlen = (int)strlen(utf8Str);
+//         static const char utf8Str[]  = u8"次の決闘がまもなく始まる！";
+//         const int         utf8Strlen = (int)strlen(utf8Str);
 //
 //         (void)argc;
 //         (void)argv;
@@ -207,7 +207,7 @@ static int hcbudoux_impl_find1(const hcbudoux_impl_item1 *base, int len, uint32_
     return 0;
   }
   while (len > 1) {
-    int const half = len / 2;
+    const int half = len / 2;
     base += (base[half - 1].var < x) * half;
     len -= half;
   }
@@ -218,9 +218,9 @@ static int hcbudoux_impl_find2(const hcbudoux_impl_item2 *base, int len, uint32_
   if (len <= 0) {
     return 0;
   }
-  uint64_t const x = ((uint64_t)x1) | (((uint64_t)x0) << 21);
+  const uint64_t x = ((uint64_t)x1) | (((uint64_t)x0) << 21);
   while (len > 1) {
-    int const half = len / 2;
+    const int half = len / 2;
     base += (base[half - 1].var < x) * half;
     len -= half;
   }
@@ -231,9 +231,9 @@ static int hcbudoux_impl_find3(const hcbudoux_impl_item3 *base, int len, uint32_
   if (len <= 0) {
     return 0;
   }
-  uint64_t const x = ((uint64_t)x2) | (((uint64_t)x1) << 21) | (((uint64_t)x0) << 42);
+  const uint64_t x = ((uint64_t)x2) | (((uint64_t)x1) << 21) | (((uint64_t)x0) << 42);
   while (len > 1) {
-    int const half = len / 2;
+    const int half = len / 2;
     base += (base[half - 1].var < x) * half;
     len -= half;
   }
@@ -249,7 +249,7 @@ static int hcbudoux_impl_compute_score_from_tables(
     const hcbudoux_impl_item3 *tw2, int tw2_count, const hcbudoux_impl_item3 *tw3, int tw3_count,
     const hcbudoux_impl_item3 *tw4, int tw4_count, uint32_t utf32_prev3, uint32_t utf32_prev2, uint32_t utf32_prev1,
     uint32_t utf32_current, uint32_t utf32_next1, uint32_t utf32_next2) {
-  int const sum = hcbudoux_impl_find1(uw1, uw1_count, utf32_prev3) +                              //
+  const int sum = hcbudoux_impl_find1(uw1, uw1_count, utf32_prev3) +                              //
                   hcbudoux_impl_find1(uw2, uw2_count, utf32_prev2) +                              //
                   hcbudoux_impl_find1(uw3, uw3_count, utf32_prev1) +                              //
                   hcbudoux_impl_find1(uw4, uw4_count, utf32_current) +                            //
@@ -271,20 +271,20 @@ static int hcbudoux_impl_compute_score_from_tables(
 #if defined(HCBUDOUX_USE_JA) && (HCBUDOUX_USE_JA)
 static int hcbudoux_impl_compute_score_ja(uint32_t utf32_prev3, uint32_t utf32_prev2, uint32_t utf32_prev1,
                                           uint32_t utf32_current, uint32_t utf32_next1, uint32_t utf32_next2) {
-  static hcbudoux_impl_item1 const uw1[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.UW1)};
-  static hcbudoux_impl_item1 const uw2[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.UW2)};
-  static hcbudoux_impl_item1 const uw3[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.UW3)};
-  static hcbudoux_impl_item1 const uw4[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.UW4)};
-  static hcbudoux_impl_item1 const uw5[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.UW5)};
-  static hcbudoux_impl_item1 const uw6[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.UW6)};
-  static hcbudoux_impl_item2 const bw1[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.BW1)};
-  static hcbudoux_impl_item2 const bw2[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.BW2)};
-  static hcbudoux_impl_item2 const bw3[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.BW3)};
-  static hcbudoux_impl_item3 const tw1[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.TW1)};
-  static hcbudoux_impl_item3 const tw2[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.TW2)};
-  static hcbudoux_impl_item3 const tw3[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.TW3)};
-  static hcbudoux_impl_item3 const tw4[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.TW4)};
-  static int const base = HCBUDOUX_IMPL_TEMPLATE(_ja_.Base);
+  static const hcbudoux_impl_item1 uw1[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.UW1)};
+  static const hcbudoux_impl_item1 uw2[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.UW2)};
+  static const hcbudoux_impl_item1 uw3[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.UW3)};
+  static const hcbudoux_impl_item1 uw4[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.UW4)};
+  static const hcbudoux_impl_item1 uw5[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.UW5)};
+  static const hcbudoux_impl_item1 uw6[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.UW6)};
+  static const hcbudoux_impl_item2 bw1[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.BW1)};
+  static const hcbudoux_impl_item2 bw2[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.BW2)};
+  static const hcbudoux_impl_item2 bw3[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.BW3)};
+  static const hcbudoux_impl_item3 tw1[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.TW1)};
+  static const hcbudoux_impl_item3 tw2[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.TW2)};
+  static const hcbudoux_impl_item3 tw3[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.TW3)};
+  static const hcbudoux_impl_item3 tw4[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_.TW4)};
+  static const int base = HCBUDOUX_IMPL_TEMPLATE(_ja_.Base);
   return hcbudoux_impl_compute_score_from_tables(
       base, uw1, (int)(sizeof(uw1) / sizeof(uw1[0])), uw2, (int)(sizeof(uw2) / sizeof(uw2[0])), uw3,
       (int)(sizeof(uw3) / sizeof(uw3[0])), uw4, (int)(sizeof(uw4) / sizeof(uw4[0])), uw5,
@@ -300,20 +300,20 @@ static int hcbudoux_impl_compute_score_ja(uint32_t utf32_prev3, uint32_t utf32_p
 #if defined(HCBUDOUX_USE_JA_KNBC) && (HCBUDOUX_USE_JA_KNBC)
 static int hcbudoux_impl_compute_score_ja_knbc(uint32_t utf32_prev3, uint32_t utf32_prev2, uint32_t utf32_prev1,
                                                uint32_t utf32_current, uint32_t utf32_next1, uint32_t utf32_next2) {
-  static hcbudoux_impl_item1 const uw1[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.UW1)};
-  static hcbudoux_impl_item1 const uw2[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.UW2)};
-  static hcbudoux_impl_item1 const uw3[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.UW3)};
-  static hcbudoux_impl_item1 const uw4[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.UW4)};
-  static hcbudoux_impl_item1 const uw5[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.UW5)};
-  static hcbudoux_impl_item1 const uw6[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.UW6)};
-  static hcbudoux_impl_item2 const bw1[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.BW1)};
-  static hcbudoux_impl_item2 const bw2[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.BW2)};
-  static hcbudoux_impl_item2 const bw3[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.BW3)};
-  static hcbudoux_impl_item3 const tw1[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.TW1)};
-  static hcbudoux_impl_item3 const tw2[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.TW2)};
-  static hcbudoux_impl_item3 const tw3[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.TW3)};
-  static hcbudoux_impl_item3 const tw4[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.TW4)};
-  static int const base = HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.Base);
+  static const hcbudoux_impl_item1 uw1[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.UW1)};
+  static const hcbudoux_impl_item1 uw2[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.UW2)};
+  static const hcbudoux_impl_item1 uw3[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.UW3)};
+  static const hcbudoux_impl_item1 uw4[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.UW4)};
+  static const hcbudoux_impl_item1 uw5[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.UW5)};
+  static const hcbudoux_impl_item1 uw6[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.UW6)};
+  static const hcbudoux_impl_item2 bw1[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.BW1)};
+  static const hcbudoux_impl_item2 bw2[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.BW2)};
+  static const hcbudoux_impl_item2 bw3[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.BW3)};
+  static const hcbudoux_impl_item3 tw1[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.TW1)};
+  static const hcbudoux_impl_item3 tw2[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.TW2)};
+  static const hcbudoux_impl_item3 tw3[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.TW3)};
+  static const hcbudoux_impl_item3 tw4[] = {HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.TW4)};
+  static const int base = HCBUDOUX_IMPL_TEMPLATE(_ja_knbc_.Base);
   return hcbudoux_impl_compute_score_from_tables(
       base, uw1, (int)(sizeof(uw1) / sizeof(uw1[0])), uw2, (int)(sizeof(uw2) / sizeof(uw2[0])), uw3,
       (int)(sizeof(uw3) / sizeof(uw3[0])), uw4, (int)(sizeof(uw4) / sizeof(uw4[0])), uw5,
@@ -329,20 +329,20 @@ static int hcbudoux_impl_compute_score_ja_knbc(uint32_t utf32_prev3, uint32_t ut
 #if defined(HCBUDOUX_USE_TH) && (HCBUDOUX_USE_TH)
 static int hcbudoux_impl_compute_score_th(uint32_t utf32_prev3, uint32_t utf32_prev2, uint32_t utf32_prev1,
                                           uint32_t utf32_current, uint32_t utf32_next1, uint32_t utf32_next2) {
-  static hcbudoux_impl_item1 const uw1[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.UW1)};
-  static hcbudoux_impl_item1 const uw2[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.UW2)};
-  static hcbudoux_impl_item1 const uw3[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.UW3)};
-  static hcbudoux_impl_item1 const uw4[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.UW4)};
-  static hcbudoux_impl_item1 const uw5[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.UW5)};
-  static hcbudoux_impl_item1 const uw6[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.UW6)};
-  static hcbudoux_impl_item2 const bw1[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.BW1)};
-  static hcbudoux_impl_item2 const bw2[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.BW2)};
-  static hcbudoux_impl_item2 const bw3[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.BW3)};
-  static hcbudoux_impl_item3 const tw1[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.TW1)};
-  static hcbudoux_impl_item3 const tw2[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.TW2)};
-  static hcbudoux_impl_item3 const tw3[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.TW3)};
-  static hcbudoux_impl_item3 const tw4[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.TW4)};
-  static int const base = HCBUDOUX_IMPL_TEMPLATE(_th_.Base);
+  static const hcbudoux_impl_item1 uw1[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.UW1)};
+  static const hcbudoux_impl_item1 uw2[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.UW2)};
+  static const hcbudoux_impl_item1 uw3[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.UW3)};
+  static const hcbudoux_impl_item1 uw4[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.UW4)};
+  static const hcbudoux_impl_item1 uw5[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.UW5)};
+  static const hcbudoux_impl_item1 uw6[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.UW6)};
+  static const hcbudoux_impl_item2 bw1[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.BW1)};
+  static const hcbudoux_impl_item2 bw2[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.BW2)};
+  static const hcbudoux_impl_item2 bw3[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.BW3)};
+  static const hcbudoux_impl_item3 tw1[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.TW1)};
+  static const hcbudoux_impl_item3 tw2[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.TW2)};
+  static const hcbudoux_impl_item3 tw3[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.TW3)};
+  static const hcbudoux_impl_item3 tw4[] = {HCBUDOUX_IMPL_TEMPLATE(_th_.TW4)};
+  static const int base = HCBUDOUX_IMPL_TEMPLATE(_th_.Base);
   return hcbudoux_impl_compute_score_from_tables(
       base, uw1, (int)(sizeof(uw1) / sizeof(uw1[0])), uw2, (int)(sizeof(uw2) / sizeof(uw2[0])), uw3,
       (int)(sizeof(uw3) / sizeof(uw3[0])), uw4, (int)(sizeof(uw4) / sizeof(uw4[0])), uw5,
@@ -358,20 +358,20 @@ static int hcbudoux_impl_compute_score_th(uint32_t utf32_prev3, uint32_t utf32_p
 #if defined(HCBUDOUX_USE_ZH_HANS) && (HCBUDOUX_USE_ZH_HANS)
 static int hcbudoux_impl_compute_score_zh_hans(uint32_t utf32_prev3, uint32_t utf32_prev2, uint32_t utf32_prev1,
                                                uint32_t utf32_current, uint32_t utf32_next1, uint32_t utf32_next2) {
-  static hcbudoux_impl_item1 const uw1[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.UW1)};
-  static hcbudoux_impl_item1 const uw2[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.UW2)};
-  static hcbudoux_impl_item1 const uw3[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.UW3)};
-  static hcbudoux_impl_item1 const uw4[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.UW4)};
-  static hcbudoux_impl_item1 const uw5[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.UW5)};
-  static hcbudoux_impl_item1 const uw6[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.UW6)};
-  static hcbudoux_impl_item2 const bw1[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.BW1)};
-  static hcbudoux_impl_item2 const bw2[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.BW2)};
-  static hcbudoux_impl_item2 const bw3[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.BW3)};
-  static hcbudoux_impl_item3 const tw1[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.TW1)};
-  static hcbudoux_impl_item3 const tw2[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.TW2)};
-  static hcbudoux_impl_item3 const tw3[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.TW3)};
-  static hcbudoux_impl_item3 const tw4[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.TW4)};
-  static int const base = HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.Base);
+  static const hcbudoux_impl_item1 uw1[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.UW1)};
+  static const hcbudoux_impl_item1 uw2[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.UW2)};
+  static const hcbudoux_impl_item1 uw3[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.UW3)};
+  static const hcbudoux_impl_item1 uw4[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.UW4)};
+  static const hcbudoux_impl_item1 uw5[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.UW5)};
+  static const hcbudoux_impl_item1 uw6[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.UW6)};
+  static const hcbudoux_impl_item2 bw1[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.BW1)};
+  static const hcbudoux_impl_item2 bw2[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.BW2)};
+  static const hcbudoux_impl_item2 bw3[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.BW3)};
+  static const hcbudoux_impl_item3 tw1[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.TW1)};
+  static const hcbudoux_impl_item3 tw2[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.TW2)};
+  static const hcbudoux_impl_item3 tw3[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.TW3)};
+  static const hcbudoux_impl_item3 tw4[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.TW4)};
+  static const int base = HCBUDOUX_IMPL_TEMPLATE(_zh_hans_.Base);
   return hcbudoux_impl_compute_score_from_tables(
       base, uw1, (int)(sizeof(uw1) / sizeof(uw1[0])), uw2, (int)(sizeof(uw2) / sizeof(uw2[0])), uw3,
       (int)(sizeof(uw3) / sizeof(uw3[0])), uw4, (int)(sizeof(uw4) / sizeof(uw4[0])), uw5,
@@ -387,20 +387,20 @@ static int hcbudoux_impl_compute_score_zh_hans(uint32_t utf32_prev3, uint32_t ut
 #if defined(HCBUDOUX_USE_ZH_HANT) && (HCBUDOUX_USE_ZH_HANT)
 static int hcbudoux_impl_compute_score_zh_hant(uint32_t utf32_prev3, uint32_t utf32_prev2, uint32_t utf32_prev1,
                                                uint32_t utf32_current, uint32_t utf32_next1, uint32_t utf32_next2) {
-  static hcbudoux_impl_item1 const uw1[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.UW1)};
-  static hcbudoux_impl_item1 const uw2[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.UW2)};
-  static hcbudoux_impl_item1 const uw3[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.UW3)};
-  static hcbudoux_impl_item1 const uw4[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.UW4)};
-  static hcbudoux_impl_item1 const uw5[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.UW5)};
-  static hcbudoux_impl_item1 const uw6[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.UW6)};
-  static hcbudoux_impl_item2 const bw1[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.BW1)};
-  static hcbudoux_impl_item2 const bw2[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.BW2)};
-  static hcbudoux_impl_item2 const bw3[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.BW3)};
-  static hcbudoux_impl_item3 const tw1[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.TW1)};
-  static hcbudoux_impl_item3 const tw2[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.TW2)};
-  static hcbudoux_impl_item3 const tw3[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.TW3)};
-  static hcbudoux_impl_item3 const tw4[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.TW4)};
-  static int const base = HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.Base);
+  static const hcbudoux_impl_item1 uw1[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.UW1)};
+  static const hcbudoux_impl_item1 uw2[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.UW2)};
+  static const hcbudoux_impl_item1 uw3[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.UW3)};
+  static const hcbudoux_impl_item1 uw4[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.UW4)};
+  static const hcbudoux_impl_item1 uw5[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.UW5)};
+  static const hcbudoux_impl_item1 uw6[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.UW6)};
+  static const hcbudoux_impl_item2 bw1[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.BW1)};
+  static const hcbudoux_impl_item2 bw2[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.BW2)};
+  static const hcbudoux_impl_item2 bw3[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.BW3)};
+  static const hcbudoux_impl_item3 tw1[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.TW1)};
+  static const hcbudoux_impl_item3 tw2[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.TW2)};
+  static const hcbudoux_impl_item3 tw3[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.TW3)};
+  static const hcbudoux_impl_item3 tw4[] = {HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.TW4)};
+  static const int base = HCBUDOUX_IMPL_TEMPLATE(_zh_hant_.Base);
   return hcbudoux_impl_compute_score_from_tables(
       base, uw1, (int)(sizeof(uw1) / sizeof(uw1[0])), uw2, (int)(sizeof(uw2) / sizeof(uw2[0])), uw3,
       (int)(sizeof(uw3) / sizeof(uw3[0])), uw4, (int)(sizeof(uw4) / sizeof(uw4[0])), uw5,
@@ -417,12 +417,12 @@ static int hcbudoux_impl_compute_score_zh_hant(uint32_t utf32_prev3, uint32_t ut
 // Score computation
 //
 static int hcbudoux_impl_compute_score(hcbudoux_ctx *ctx, hcbudoux_impl_lang lang) {
-  uint32_t const u0 = ctx->impl.utf32s[0];
-  uint32_t const u1 = ctx->impl.utf32s[1];
-  uint32_t const u2 = ctx->impl.utf32s[2];
-  uint32_t const u3 = ctx->impl.utf32s[3];
-  uint32_t const u4 = ctx->impl.utf32s[4];
-  uint32_t const u5 = ctx->impl.utf32s[5];
+  const uint32_t u0 = ctx->impl.utf32s[0];
+  const uint32_t u1 = ctx->impl.utf32s[1];
+  const uint32_t u2 = ctx->impl.utf32s[2];
+  const uint32_t u3 = ctx->impl.utf32s[3];
+  const uint32_t u4 = ctx->impl.utf32s[4];
+  const uint32_t u5 = ctx->impl.utf32s[5];
 
   switch (lang) {
     case hcbudoux_impl_lang_ja:
@@ -463,15 +463,15 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
   for (;;) {
     // Read a UTF-8 character
     uint32_t new_utf32_char = 0;
-    int const new_utf32_char_index = ctx->impl.curr_index;
+    const int new_utf32_char_index = ctx->impl.curr_index;
     int new_utf32_char_size_in_bytes = 0;
     {
-      int const rest = ctx->impl.utf8_str_size_in_bytes - new_utf32_char_index;
+      const int rest = ctx->impl.utf8_str_size_in_bytes - new_utf32_char_index;
 
-      uint8_t const c0 = (uint8_t)(rest >= 1 ? (ctx->impl.utf8_str)[new_utf32_char_index + 0] : 0);
-      uint8_t const c1 = (uint8_t)(rest >= 2 ? (ctx->impl.utf8_str)[new_utf32_char_index + 1] : 0);
-      uint8_t const c2 = (uint8_t)(rest >= 3 ? (ctx->impl.utf8_str)[new_utf32_char_index + 2] : 0);
-      uint8_t const c3 = (uint8_t)(rest >= 4 ? (ctx->impl.utf8_str)[new_utf32_char_index + 3] : 0);
+      const uint8_t c0 = (uint8_t)(rest >= 1 ? (ctx->impl.utf8_str)[new_utf32_char_index + 0] : 0);
+      const uint8_t c1 = (uint8_t)(rest >= 2 ? (ctx->impl.utf8_str)[new_utf32_char_index + 1] : 0);
+      const uint8_t c2 = (uint8_t)(rest >= 3 ? (ctx->impl.utf8_str)[new_utf32_char_index + 2] : 0);
+      const uint8_t c3 = (uint8_t)(rest >= 4 ? (ctx->impl.utf8_str)[new_utf32_char_index + 3] : 0);
 
       // https://en.wikipedia.org/wiki/UTF-8#Description
       //      byte1
@@ -486,8 +486,8 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
           //
           // |         |         |         |         |
           // |0000 0000|0000 0000|0000 0000|0yyy zzzz|    [0x0000,0x007f]
-          uint32_t const p0 = c0 & 0x7f;
-          uint32_t const code_point = p0;
+          const uint32_t p0 = c0 & 0x7f;
+          const uint32_t code_point = p0;
           new_utf32_char = code_point;
           new_utf32_char_size_in_bytes = 1;
         }
@@ -498,9 +498,9 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
           //
           // |         |         |         |         |
           // |0000 0000|0000 0000|0000 0xxx|yyyy zzzz|    [0x0080,0x07ff]
-          uint32_t const p0 = (c0 & 0x1f) << 6;
-          uint32_t const p1 = (c1 & 0x3f);
-          uint32_t const code_point = p0 | p1;
+          const uint32_t p0 = (c0 & 0x1f) << 6;
+          const uint32_t p1 = (c1 & 0x3f);
+          const uint32_t code_point = p0 | p1;
           new_utf32_char = code_point;
           new_utf32_char_size_in_bytes = 2;
         }
@@ -511,10 +511,10 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
           //
           // |         |         |         |         |
           // |0000 0000|0000 0000|wwww xxxx|yyyy zzzz|    [0x0800,0xffff]
-          uint32_t const p0 = (c0 & 0x0f) << 12;
-          uint32_t const p1 = (c1 & 0x3f) << 6;
-          uint32_t const p2 = (c2 & 0x3f);
-          uint32_t const code_point = p0 | p1 | p2;
+          const uint32_t p0 = (c0 & 0x0f) << 12;
+          const uint32_t p1 = (c1 & 0x3f) << 6;
+          const uint32_t p2 = (c2 & 0x3f);
+          const uint32_t code_point = p0 | p1 | p2;
           new_utf32_char = code_point;
           new_utf32_char_size_in_bytes = 3;
         }
@@ -525,11 +525,11 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
           //
           // |         |         |         |         |
           // |0000 0000|000u vvvv|wwww xxxx|yyyy zzzz|    [0x010000,0x10ffff]
-          uint32_t const p0 = (c0 & 0x07) << 18;
-          uint32_t const p1 = (c1 & 0x3f) << 12;
-          uint32_t const p2 = (c2 & 0x3f) << 6;
-          uint32_t const p3 = (c3 & 0x3f);
-          uint32_t const code_point = p0 | p1 | p2 | p3;
+          const uint32_t p0 = (c0 & 0x07) << 18;
+          const uint32_t p1 = (c1 & 0x3f) << 12;
+          const uint32_t p2 = (c2 & 0x3f) << 6;
+          const uint32_t p3 = (c3 & 0x3f);
+          const uint32_t code_point = p0 | p1 | p2 | p3;
           new_utf32_char = code_point;
           new_utf32_char_size_in_bytes = 4;
         }
@@ -559,9 +559,9 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
     ctx->impl.curr_index += new_utf32_char_size_in_bytes;
 
     {
-      int const start = ctx->impl.last_index;
-      int const end = ctx->impl.indices[3];
-      int const length = end - start;
+      const int start = ctx->impl.last_index;
+      const int end = ctx->impl.indices[3];
+      const int length = end - start;
 
       // indices[3] (end) is the byte offset of the current character (utf32s[3]).
       // -1 means the slot has not been filled yet; an offset past the end means EOF padding.
@@ -571,7 +571,7 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
         // Queue contains valid input.
 
         // Evaluate queue
-        int const score = hcbudoux_impl_compute_score(ctx, lang);
+        const int score = hcbudoux_impl_compute_score(ctx, lang);
 
         // If score > 0, it means we can put &nbsp; between character at
         // utf32s[2] and utf32s[3]. Also, since the first valid character may

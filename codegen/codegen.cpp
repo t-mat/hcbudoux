@@ -49,38 +49,38 @@ Model loadModel(const std::string &json) {
         uint32_t utf32_char = 0;
         int utf32_char_size_in_bytes = 0;
         {
-          int const rest = static_cast<int>(utf8s.size() - i);
-          uint8_t const c0 = static_cast<uint8_t>(rest >= 1 ? utf8s[i + 0] : 0);
-          uint8_t const c1 = static_cast<uint8_t>(rest >= 2 ? utf8s[i + 1] : 0);
-          uint8_t const c2 = static_cast<uint8_t>(rest >= 3 ? utf8s[i + 2] : 0);
-          uint8_t const c3 = static_cast<uint8_t>(rest >= 4 ? utf8s[i + 3] : 0);
+          const int rest = static_cast<int>(utf8s.size() - i);
+          const uint8_t c0 = static_cast<uint8_t>(rest >= 1 ? utf8s[i + 0] : 0);
+          const uint8_t c1 = static_cast<uint8_t>(rest >= 2 ? utf8s[i + 1] : 0);
+          const uint8_t c2 = static_cast<uint8_t>(rest >= 3 ? utf8s[i + 2] : 0);
+          const uint8_t c3 = static_cast<uint8_t>(rest >= 4 ? utf8s[i + 3] : 0);
           if ((c0 & 0x80) == 0) {
             if (rest >= 1) {
-              uint32_t const p0 = c0 & 0x7f;
+              const uint32_t p0 = c0 & 0x7f;
               utf32_char = p0;
               utf32_char_size_in_bytes = 1;
             }
           } else if ((c0 & 0xe0) == 0xc0) {
             if (rest >= 2) {
-              uint32_t const p0 = (c0 & 0x1f) << 6;
-              uint32_t const p1 = (c1 & 0x3f);
+              const uint32_t p0 = (c0 & 0x1f) << 6;
+              const uint32_t p1 = (c1 & 0x3f);
               utf32_char = p0 | p1;
               utf32_char_size_in_bytes = 2;
             }
           } else if ((c0 & 0xf0) == 0xe0) {
             if (rest >= 3) {
-              uint32_t const p0 = (c0 & 0x0f) << 12;
-              uint32_t const p1 = (c1 & 0x3f) << 6;
-              uint32_t const p2 = (c2 & 0x3f);
+              const uint32_t p0 = (c0 & 0x0f) << 12;
+              const uint32_t p1 = (c1 & 0x3f) << 6;
+              const uint32_t p2 = (c2 & 0x3f);
               utf32_char = p0 | p1 | p2;
               utf32_char_size_in_bytes = 3;
             }
           } else if ((c0 & 0xf8) == 0xf0) {
             if (rest >= 4) {
-              uint32_t const p0 = (c0 & 0x07) << 18;
-              uint32_t const p1 = (c1 & 0x3f) << 12;
-              uint32_t const p2 = (c2 & 0x3f) << 6;
-              uint32_t const p3 = (c3 & 0x3f);
+              const uint32_t p0 = (c0 & 0x07) << 18;
+              const uint32_t p1 = (c1 & 0x3f) << 12;
+              const uint32_t p2 = (c2 & 0x3f) << 6;
+              const uint32_t p3 = (c3 & 0x3f);
               utf32_char = p0 | p1 | p2 | p3;
               utf32_char_size_in_bytes = 4;
             }
@@ -98,7 +98,7 @@ Model loadModel(const std::string &json) {
       return utf32s;
     };
 
-    std::vector<uint32_t> const utf32s = utf8strToUtf32vec(utf8str);
+    const std::vector<uint32_t> utf32s = utf8strToUtf32vec(utf8str);
     switch (utf32s.size()) {
       case 1:
         return utf32s[0];
@@ -139,7 +139,7 @@ Model loadModel(const std::string &json) {
 
   for (const json_object_element_s *topElem = object->start; topElem; topElem = topElem->next) {
     const json_object_element_s *const table = topElem;
-    std::string const tableName(table->name->string, table->name->string + table->name->string_size);
+    const std::string tableName(table->name->string, table->name->string + table->name->string_size);
     const json_object_s *const tableObject = json_value_as_object(table->value);
     if (!tableObject) {
       model = {};
@@ -153,9 +153,9 @@ Model loadModel(const std::string &json) {
       if (value->type != json_type_number) {
         continue;
       }
-      std::string const elemName(p->name->string, p->name->string + p->name->string_size);
+      const std::string elemName(p->name->string, p->name->string + p->name->string_size);
       const auto *const jn = static_cast<const json_number_s *>(value->payload);
-      std::string const elemValue(jn->number, jn->number + jn->number_size);
+      const std::string elemValue(jn->number, jn->number + jn->number_size);
 
       model[std::string{tableName}][encodeKey(elemName)] = std::stoi(std::string{elemValue});
     }
@@ -204,25 +204,25 @@ TextTemplate::Dictionary generateTemplateDictionary() {
   TextTemplate::Dictionary templateMap;
 
   for (const Language &language : languages) {
-    std::string const jsonFilename = "../third_party/budoux/budoux/models/" + language.jsonFilename;
-    std::string const json = readFile(jsonFilename);
+    const std::string jsonFilename = "../third_party/budoux/budoux/models/" + language.jsonFilename;
+    const std::string json = readFile(jsonFilename);
     if (json.empty()) {
       fprintf(stderr, "Failed to load %s\n", jsonFilename.c_str());
       return {};
     }
-    Model const model = loadModel({json.data(), json.size()});
+    const Model model = loadModel({json.data(), json.size()});
     int baseScore = 0;
 
-    for (auto const &table : model) {
-      auto const &tableName = table.first;  // "UW1"
-      auto const &elements = table.second;  // ["A"] = 1, ["B"] = 2, ...
+    for (const auto &table : model) {
+      const auto &tableName = table.first;  // "UW1"
+      const auto &elements = table.second;  // ["A"] = 1, ["B"] = 2, ...
 
       std::string items;
       int count = 0;
 
-      for (auto const &element : elements) {
-        uint64_t const elementEncodedName = element.first;
-        int const elementScore = element.second;
+      for (const auto &element : elements) {
+        const uint64_t elementEncodedName = element.first;
+        const int elementScore = element.second;
 
         if (count++ % 4 == 0) {
           items += "\n        ";
@@ -237,12 +237,12 @@ TextTemplate::Dictionary generateTemplateDictionary() {
         baseScore += elementScore;
       }
 
-      std::string const key = generateTemplateName("_" + language.symbol + "_." + tableName);
+      const std::string key = generateTemplateName("_" + language.symbol + "_." + tableName);
       templateMap[key] = items;
     }
 
     {
-      std::string const key = generateTemplateName("_" + language.symbol + "_.Base");
+      const std::string key = generateTemplateName("_" + language.symbol + "_.Base");
       templateMap[key] = itemScoreToString(-baseScore);
     }
   }
@@ -251,13 +251,13 @@ TextTemplate::Dictionary generateTemplateDictionary() {
 }
 
 bool generate() {
-  std::string const templateFilename = "./hcbudoux.template.h";
-  std::string const outFilename = "../include/hcbudoux.h";
-  TextTemplate::Dictionary const templateMap = generateTemplateDictionary();
+  const std::string templateFilename = "./hcbudoux.template.h";
+  const std::string outFilename = "../include/hcbudoux.h";
+  const TextTemplate::Dictionary templateMap = generateTemplateDictionary();
   if (templateMap.empty()) {
     return false;
   }
-  std::string const outStr = TextTemplate::replaceAll(readFile(templateFilename), templateMap);
+  const std::string outStr = TextTemplate::replaceAll(readFile(templateFilename), templateMap);
   if (outStr.empty()) {
     return false;
   }
@@ -265,7 +265,7 @@ bool generate() {
   if (!fp) {
     return false;
   }
-  size_t const written = fwrite(outStr.data(), sizeof(outStr[0]), outStr.size(), fp);
+  const size_t written = fwrite(outStr.data(), sizeof(outStr[0]), outStr.size(), fp);
   fclose(fp);
   if (written != outStr.size()) {
     return false;

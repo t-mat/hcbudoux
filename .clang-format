@@ -1,6 +1,6 @@
 ---
 BasedOnStyle: Google
 ColumnLimit: 120
-QualifierAlignment: Right
+QualifierAlignment: Left
 DerivePointerAlignment: false
 PointerAlignment: Right

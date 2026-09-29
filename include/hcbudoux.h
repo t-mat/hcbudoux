@@ -42,8 +42,8 @@
 //     #endif
 //
 //     int main(int argc, const char **argv) {
-//         static char const utf8Str[]  = u8"次の決闘がまもなく始まる！";
-//         int const         utf8Strlen = (int)strlen(utf8Str);
+//         static const char utf8Str[]  = u8"次の決闘がまもなく始まる！";
+//         const int         utf8Strlen = (int)strlen(utf8Str);
 //
 //         (void)argc;
 //         (void)argv;
@@ -207,7 +207,7 @@ static int hcbudoux_impl_find1(const hcbudoux_impl_item1 *base, int len, uint32_
     return 0;
   }
   while (len > 1) {
-    int const half = len / 2;
+    const int half = len / 2;
     base += (base[half - 1].var < x) * half;
     len -= half;
   }
@@ -218,9 +218,9 @@ static int hcbudoux_impl_find2(const hcbudoux_impl_item2 *base, int len, uint32_
   if (len <= 0) {
     return 0;
   }
-  uint64_t const x = ((uint64_t)x1) | (((uint64_t)x0) << 21);
+  const uint64_t x = ((uint64_t)x1) | (((uint64_t)x0) << 21);
   while (len > 1) {
-    int const half = len / 2;
+    const int half = len / 2;
     base += (base[half - 1].var < x) * half;
     len -= half;
   }
@@ -231,9 +231,9 @@ static int hcbudoux_impl_find3(const hcbudoux_impl_item3 *base, int len, uint32_
   if (len <= 0) {
     return 0;
   }
-  uint64_t const x = ((uint64_t)x2) | (((uint64_t)x1) << 21) | (((uint64_t)x0) << 42);
+  const uint64_t x = ((uint64_t)x2) | (((uint64_t)x1) << 21) | (((uint64_t)x0) << 42);
   while (len > 1) {
-    int const half = len / 2;
+    const int half = len / 2;
     base += (base[half - 1].var < x) * half;
     len -= half;
   }
@@ -249,7 +249,7 @@ static int hcbudoux_impl_compute_score_from_tables(
     const hcbudoux_impl_item3 *tw2, int tw2_count, const hcbudoux_impl_item3 *tw3, int tw3_count,
     const hcbudoux_impl_item3 *tw4, int tw4_count, uint32_t utf32_prev3, uint32_t utf32_prev2, uint32_t utf32_prev1,
     uint32_t utf32_current, uint32_t utf32_next1, uint32_t utf32_next2) {
-  int const sum = hcbudoux_impl_find1(uw1, uw1_count, utf32_prev3) +                              //
+  const int sum = hcbudoux_impl_find1(uw1, uw1_count, utf32_prev3) +                              //
                   hcbudoux_impl_find1(uw2, uw2_count, utf32_prev2) +                              //
                   hcbudoux_impl_find1(uw3, uw3_count, utf32_prev1) +                              //
                   hcbudoux_impl_find1(uw4, uw4_count, utf32_current) +                            //
@@ -271,7 +271,7 @@ static int hcbudoux_impl_compute_score_from_tables(
 #if defined(HCBUDOUX_USE_JA) && (HCBUDOUX_USE_JA)
 static int hcbudoux_impl_compute_score_ja(uint32_t utf32_prev3, uint32_t utf32_prev2, uint32_t utf32_prev1,
                                           uint32_t utf32_current, uint32_t utf32_next1, uint32_t utf32_next2) {
-  static hcbudoux_impl_item1 const uw1[] = {
+  static const hcbudoux_impl_item1 uw1[] = {
         {0x0000005d,   -16},{0x00003002,   -54},{0x0000300d,  -142},{0x0000300e,  -563},
         {0x00003044,  -150},{0x00003046,  +105},{0x00003048,  -127},{0x0000304b,  -188},
         {0x0000304c,  -211},{0x0000304d,   -16},{0x0000304f,  +145},{0x00003053,   +90},
@@ -297,7 +297,7 @@ static int hcbudoux_impl_compute_score_ja(uint32_t utf32_prev3, uint32_t utf32_p
         {0x00009032,  +138},{0x00009577,  +654},{0x00009593,  +272},{0x0000ff01,   +58},
         {0x0000ff0e,  -433},{0x0000ff10,  +216},{0x0000ff12,  +127},{0x0000ff13,  -312},
         {0x0000ff3b,  -530},};
-  static hcbudoux_impl_item1 const uw2[] = {
+  static const hcbudoux_impl_item1 uw2[] = {
         {0x0000003f,  -394},{0x0000005d,  -188},{0x00002026,  +248},{0x00002605,  -385},
         {0x00003001, -1560},{0x00003002, -1620},{0x00003005,  +307},{0x0000300c,  -319},
         {0x0000300d,  +196},{0x0000300e,  -201},{0x00003042,  -181},{0x00003044,  -163},
@@ -338,7 +338,7 @@ static int hcbudoux_impl_compute_score_ja(uint32_t utf32_prev3, uint32_t utf32_p
         {0x0000ff12,  -244},{0x0000ff13,  -336},{0x0000ff14,  +331},{0x0000ff15,  -111},
         {0x0000ff1f,  -613},{0x0000ff28,  -149},{0x0000ff30,  -621},{0x0000ff3b,   -53},
         {0x0000ff3d,  -260},{0x0000ff3e,  +104},};
-  static hcbudoux_impl_item1 const uw3[] = {
+  static const hcbudoux_impl_item1 uw3[] = {
         {0x0000003f, +4618},{0x0000005b, -1016},{0x0000005d, +3518},{0x0000201d, +1254},
         {0x00002026, +3108},{0x00002605, +2969},{0x00002606, +3579},{0x0000266a, +2798},
         {0x00003000,  +443},{0x00003001, +5467},{0x00003002, +7360},{0x00003005, +2075},
@@ -386,7 +386,7 @@ static int hcbudoux_impl_compute_score_ja(uint32_t utf32_prev3, uint32_t utf32_p
         {0x0000ff0c, +4096},{0x0000ff0e, +2420},{0x0000ff10,  -780},{0x0000ff11, -1299},
         {0x0000ff15,   -42},{0x0000ff1a,  +394},{0x0000ff1f, +4309},{0x0000ff3b,  -723},
         {0x0000ff3d, +2437},{0x0000ff4f,  -447},};
-  static hcbudoux_impl_item1 const uw4[] = {
+  static const hcbudoux_impl_item1 uw4[] = {
         {0x00000028,  +594},{0x0000003f, -4410},{0x0000005b, +3543},{0x0000005d, -1408},
         {0x0000201d, -1346},{0x00002026, -3126},{0x00002605,  -836},{0x00002606, -1751},
         {0x0000266a, -2073},{0x00003000, -1386},{0x00003001, -8112},{0x00003002, -7968},
@@ -446,7 +446,7 @@ static int hcbudoux_impl_compute_score_ja(uint32_t utf32_prev3, uint32_t utf32_p
         {0x0000ff0e, -3347},{0x0000ff10,  -429},{0x0000ff11, +1029},{0x0000ff12,  +814},
         {0x0000ff13,  +429},{0x0000ff14,  -171},{0x0000ff1f, -5676},{0x0000ff33,  -129},
         {0x0000ff3b, +1695},{0x0000ff3d, -1498},{0x0000ff3e,  -101},{0x0000ff4f,  -612},};
-  static hcbudoux_impl_item1 const uw5[] = {
+  static const hcbudoux_impl_item1 uw5[] = {
         {0x0000005b,  -400},{0x00002026,  -194},{0x00003001, -1080},{0x00003002, -2181},
         {0x00003005,  +242},{0x0000300d, -1106},{0x00003042,  -405},{0x00003044,  +348},
         {0x00003046,  +445},{0x00003048,  +735},{0x0000304b,  +192},{0x0000304c,  -572},
@@ -475,7 +475,7 @@ static int hcbudoux_impl_compute_score_ja(uint32_t utf32_prev3, uint32_t utf32_p
         {0x000096fb,  -194},{0x00009854,  -185},{0x0000ff01,  -301},{0x0000ff0e,  -215},
         {0x0000ff11,  -105},{0x0000ff12,  -107},{0x0000ff1f,  -246},{0x0000ff2e,  +766},
         {0x0000ff3d,  -414},};
-  static hcbudoux_impl_item1 const uw6[] = {
+  static const hcbudoux_impl_item1 uw6[] = {
         {0x00003001,    +9},{0x00003002,  -297},{0x0000300d,  -178},{0x00003044,  +352},
         {0x00003046,  +213},{0x0000304a,  -407},{0x0000304b,  +319},{0x0000304c,  +361},
         {0x0000304e,  +651},{0x0000304f,  +146},{0x00003051,  -204},{0x00003053,  +220},
@@ -500,7 +500,7 @@ static int hcbudoux_impl_compute_score_ja(uint32_t utf32_prev3, uint32_t utf32_p
         {0x0000898b,  -186},{0x00008a00,  -223},{0x00008fbc,  +460},{0x00008fd4, +1159},
         {0x00009001, -1595},{0x0000904a,  -296},{0x0000904e,  +242},{0x000096fb,  +367},
         {0x0000ff10,  +699},{0x0000ff11,  +112},{0x0000ff1a,  +616},{0x0000ff3d,  -108},};
-  static hcbudoux_impl_item2 const bw1[] = {
+  static const hcbudoux_impl_item2 bw1[] = {
         {UINT64_C(0x0000000600203068),  +346},{UINT64_C(0x0000000600204eca),  +791},{UINT64_C(0x000000060020771f), +4949},{UINT64_C(0x000000060040300d), +2211},
         {UINT64_C(0x00000006004030fb), +2844},{UINT64_C(0x0000000601a03068),  +307},{UINT64_C(0x00000006084030fc), +1783},{UINT64_C(0x0000000608803001),  -401},
         {UINT64_C(0x0000000608803044),  -406},{UINT64_C(0x0000000608803046),  +537},{UINT64_C(0x0000000608803057),  +190},{UINT64_C(0x000000060880305f),  +161},
@@ -550,7 +550,7 @@ static int hcbudoux_impl_compute_score_ja(uint32_t utf32_prev3, uint32_t utf32_p
         {UINT64_C(0x0000001043c03046),  +250},{UINT64_C(0x0000001140003044),  -576},{UINT64_C(0x0000001196e03044),  -766},{UINT64_C(0x00000012dc405bae),    +4},
         {UINT64_C(0x00000012ea403044),  +406},{UINT64_C(0x000000133580306e),  -720},{UINT64_C(0x0000001fe2005186),  +367},{UINT64_C(0x0000001fe2403001), -1970},
         {UINT64_C(0x0000001fe28065e5),    +4},{UINT64_C(0x0000001fe7c0ff3e),  +383},{UINT64_C(0x0000001fe9e0ff52),  +419},};
-  static hcbudoux_impl_item2 const bw2[] = {
+  static const hcbudoux_impl_item2 bw2[] = {
         {UINT64_C(0x0000000600203068), -1250},{UINT64_C(0x000000060020306a),  -261},{UINT64_C(0x0000000600206e05),   -20},{UINT64_C(0x0000000600407b11), -1208},
         {UINT64_C(0x0000000601a03067),  +890},{UINT64_C(0x0000000601a03068),  -411},{UINT64_C(0x0000000608803044),  -947},{UINT64_C(0x0000000608803057),  -754},
         {UINT64_C(0x000000060880305f), -1285},{UINT64_C(0x0000000608803064),  -148},{UINT64_C(0x0000000608803067),   -25},{UINT64_C(0x0000000608803068),  -938},
@@ -589,7 +589,7 @@ static int hcbudoux_impl_compute_score_ja(uint32_t utf32_prev3, uint32_t utf32_p
         {UINT64_C(0x00000009d7403044), +1482},{UINT64_C(0x00000009f840306a),  +616},{UINT64_C(0x0000000bc5e096fb), -1396},{UINT64_C(0x0000000bf68030a8), +1530},
         {UINT64_C(0x0000000cbca03068),  +359},{UINT64_C(0x0000000cbca0672c),  -276},{UINT64_C(0x0000000ce58030a4), +2074},{UINT64_C(0x0000000d82e0306a),  +327},
         {UINT64_C(0x0000001fe7a079c1),  -583},};
-  static hcbudoux_impl_item2 const bw3[] = {
+  static const hcbudoux_impl_item2 bw3[] = {
         {UINT64_C(0x0000000608403068), +1221},{UINT64_C(0x0000000608403075),   +67},{UINT64_C(0x000000060840308a),  +108},{UINT64_C(0x000000060840308b),  -256},
         {UINT64_C(0x0000000608803044), +1168},{UINT64_C(0x0000000608803046),  +728},{UINT64_C(0x000000060880304b),  +673},{UINT64_C(0x000000060880305f),   -45},
         {UINT64_C(0x0000000608803064),   +74},{UINT64_C(0x0000000608803066),  -426},{UINT64_C(0x0000000608803068),   -60},{UINT64_C(0x000000060880307e),  +567},
@@ -632,7 +632,7 @@ static int hcbudoux_impl_compute_score_ja(uint32_t utf32_prev3, uint32_t utf32_p
         {UINT64_C(0x0000000cbca0304c),  +427},{UINT64_C(0x0000000cdf003044),   +89},{UINT64_C(0x0000000ce0008fd1),  +163},{UINT64_C(0x0000000d4be05668), -1637},
         {UINT64_C(0x0000000f2da0308a),   +67},{UINT64_C(0x000000104e40306f),  +115},{UINT64_C(0x000000110980304f),  +124},{UINT64_C(0x000000120340308a),  -230},
         {UINT64_C(0x00000012df608a71),   -39},{UINT64_C(0x00000012df608eca),   +86},};
-  static hcbudoux_impl_item3 const tw1[] = {
+  static const hcbudoux_impl_item3 tw1[] = {
         {UINT64_C(0x00c004060ba0308c),  +747},{UINT64_C(0x00c008060be03060),   +29},{UINT64_C(0x00c0080b22a065b9),  +166},{UINT64_C(0x00c108061140304c), -2649},
         {UINT64_C(0x00c110060d003053),  -798},{UINT64_C(0x00c128060a203070),  +143},{UINT64_C(0x00c128060c603066), +3035},{UINT64_C(0x00c12c060c60305f),   -79},
         {UINT64_C(0x00c12c060d40304b),  +740},{UINT64_C(0x00c12c060d40308a), +1974},{UINT64_C(0x00c130104de03044),  +774},{UINT64_C(0x00c13c060aa03093),  +218},
@@ -650,7 +650,7 @@ static int hcbudoux_impl_compute_score_ja(uint32_t utf32_prev3, uint32_t utf32_p
         {UINT64_C(0x00c2480610403064), +1739},{UINT64_C(0x00c24c060ce03082),  +151},{UINT64_C(0x00c24c060d203093), +1410},{UINT64_C(0x00c3b0061b2030eb),  +353},
         {UINT64_C(0x00c3ec061f6030fb), +1407},{UINT64_C(0x014594061180308b),  +242},{UINT64_C(0x014d040a40c0306b),  -350},{UINT64_C(0x015bc0060c60305f),  +668},
         {UINT64_C(0x018c04060c603066), -1039},{UINT64_C(0x01d460060900304c), -1204},{UINT64_C(0x03fc401fe2005186),    +8},};
-  static hcbudoux_impl_item3 const tw2[] = {
+  static const hcbudoux_impl_item3 tw2[] = {
         {UINT64_C(0x00c110060d003053), -3724},{UINT64_C(0x00c118060d60306a),  -935},{UINT64_C(0x00c12c0611203057),  +521},{UINT64_C(0x00c12c061120306a),  -674},
         {UINT64_C(0x00c15c060960306a),  +407},{UINT64_C(0x00c15c060be03053),  -254},{UINT64_C(0x00c15c060cc0304a), -1381},{UINT64_C(0x00c174060dc0307e), -1377},
         {UINT64_C(0x00c174060dc05f8c),  -576},{UINT64_C(0x00c174061040305d), -1862},{UINT64_C(0x00c1740611804ee5),  +193},{UINT64_C(0x00c1840609803046), -1683},
@@ -661,7 +661,7 @@ static int hcbudoux_impl_compute_score_ja(uint32_t utf32_prev3, uint32_t utf32_p
         {UINT64_C(0x00c224060d008a00), -1214},{UINT64_C(0x00c22c060d603064),   -63},{UINT64_C(0x00c230060de0305d), -1393},{UINT64_C(0x00c2300611603053),  +241},
         {UINT64_C(0x00c24c060ce03044), -1872},{UINT64_C(0x00c24c060d403093), +1011},{UINT64_C(0x014818060d603042), -2585},{UINT64_C(0x015bf409d740304c),  +960},
         {UINT64_C(0x0165cc060dc05b50), -1722},{UINT64_C(0x01b05c060d605165), -3681},};
-  static hcbudoux_impl_item3 const tw3[] = {
+  static const hcbudoux_impl_item3 tw3[] = {
         {UINT64_C(0x00c004060ba03057), -3750},{UINT64_C(0x00c004060fc0305f),  -835},{UINT64_C(0x00c034060c603066),  +907},{UINT64_C(0x00c1180608803046),  -584},
         {UINT64_C(0x00c1300608403063),   +84},{UINT64_C(0x00c13c060ae03066),  -261},{UINT64_C(0x00c164060a603068),  +874},{UINT64_C(0x00c17c060a603068),  -102},
         {UINT64_C(0x00c1980608803046),  +555},{UINT64_C(0x00c198060880308b), -2523},{UINT64_C(0x00c198060940304d),  -599},{UINT64_C(0x00c198060ae0307e), -1696},
@@ -673,7 +673,7 @@ static int hcbudoux_impl_compute_score_ja(uint32_t utf32_prev3, uint32_t utf32_p
         {UINT64_C(0x00c1bc060ba0308c),  -568},{UINT64_C(0x00c1bc060d403044),  -459},{UINT64_C(0x00c1bc060fc03063), -1277},{UINT64_C(0x00c1c00608803044), -1212},
         {UINT64_C(0x00c1e00611003046),    +8},{UINT64_C(0x00c224060d403044), -1558},{UINT64_C(0x00c22c060a603068),  -370},{UINT64_C(0x00c22c0cb720306f),  -679},
         {UINT64_C(0x00c3f0060ae0305f), +1305},{UINT64_C(0x03fc30060ba0308c),   -71},};
-  static hcbudoux_impl_item3 const tw4[] = {
+  static const hcbudoux_impl_item3 tw4[] = {
         {UINT64_C(0x00c108060be0308a),   -55},{UINT64_C(0x00c108061140304c), +2582},{UINT64_C(0x00c108061140307e),  -911},{UINT64_C(0x00c1080611603002),  -561},
         {UINT64_C(0x00c1080611603044), -3206},{UINT64_C(0x00c1080611603082),   +59},{UINT64_C(0x00c1100609003070),  +426},{UINT64_C(0x00c110060960306a),  +449},
         {UINT64_C(0x00c1100609e03055),  -190},{UINT64_C(0x00c1100609e03089),  +137},{UINT64_C(0x00c110060a20306a),  -420},{UINT64_C(0x00c110060c603066),  -305},
@@ -694,7 +694,7 @@ static int hcbudoux_impl_compute_score_ja(uint32_t utf32_prev3, uint32_t utf32_p
         {UINT64_C(0x00c210060c603066),  +174},{UINT64_C(0x00c2200608c03067),  -694},{UINT64_C(0x00c2200608c0306a), -2297},{UINT64_C(0x00c2200608c0306b), -1480},
         {UINT64_C(0x00c2200608c03084), +2339},{UINT64_C(0x00c23c060a203067),  -600},{UINT64_C(0x00c290061e6030c6),  +204},{UINT64_C(0x00c35c061da030b0), +1689},
         {UINT64_C(0x00c384061f8030eb),   +52},{UINT64_C(0x013ab0121fa0306b),   +12},{UINT64_C(0x014b740c4960306b),  +825},{UINT64_C(0x014fbc101fa06027), +2323},};
-  static int const base =  -3216;
+  static const int base =  -3216;
   return hcbudoux_impl_compute_score_from_tables(
       base, uw1, (int)(sizeof(uw1) / sizeof(uw1[0])), uw2, (int)(sizeof(uw2) / sizeof(uw2[0])), uw3,
       (int)(sizeof(uw3) / sizeof(uw3[0])), uw4, (int)(sizeof(uw4) / sizeof(uw4[0])), uw5,
@@ -710,7 +710,7 @@ static int hcbudoux_impl_compute_score_ja(uint32_t utf32_prev3, uint32_t utf32_p
 #if defined(HCBUDOUX_USE_JA_KNBC) && (HCBUDOUX_USE_JA_KNBC)
 static int hcbudoux_impl_compute_score_ja_knbc(uint32_t utf32_prev3, uint32_t utf32_prev2, uint32_t utf32_prev1,
                                                uint32_t utf32_current, uint32_t utf32_next1, uint32_t utf32_next2) {
-  static hcbudoux_impl_item1 const uw1[] = {
+  static const hcbudoux_impl_item1 uw1[] = {
         {0x00003001,   -35},{0x0000300c,   -85},{0x00003042,   +33},{0x00003044,   -69},
         {0x00003046,   +99},{0x0000304b,   -63},{0x0000304c,  -108},{0x0000304f,   +76},
         {0x00003055,   -49},{0x00003056,  +401},{0x00003057,   -64},{0x00003059,  +392},
@@ -730,7 +730,7 @@ static int hcbudoux_impl_compute_score_ja_knbc(uint32_t utf32_prev3, uint32_t ut
         {0x00009023,   -93},{0x0000ff01,   +24},{0x0000ff08,  -130},{0x0000ff0e,  -312},
         {0x0000ff10,   +39},{0x0000ff13,  -286},{0x0000ff1f,   +23},{0x0000ff3b,  -563},
         {0x0000ff3e,  +641},{0x0000ff4f,  -436},};
-  static hcbudoux_impl_item1 const uw2[] = {
+  static const hcbudoux_impl_item1 uw2[] = {
         {0x00002026,  +212},{0x00003001, -1519},{0x00003002, -1208},{0x00003005,  +113},
         {0x0000300c,  -524},{0x00003042,   +57},{0x00003044,   -81},{0x00003046,  -300},
         {0x00003048,  +234},{0x0000304a,  -720},{0x0000304b,   -78},{0x0000304c,  -958},
@@ -760,7 +760,7 @@ static int hcbudoux_impl_compute_score_ja_knbc(uint32_t utf32_prev3, uint32_t ut
         {0x000096fb,  +101},{0x0000984c, +1090},{0x00009ad8,   +88},{0x0000ff0c,  -653},
         {0x0000ff0e,  -510},{0x0000ff12,   -97},{0x0000ff13,   -24},{0x0000ff3b,  -225},
         {0x0000ff3d,  -142},{0x0000ff3e,  +636},};
-  static hcbudoux_impl_item1 const uw3[] = {
+  static const hcbudoux_impl_item1 uw3[] = {
         {0x0000201d,  +351},{0x00002026, +2868},{0x00002605,  +647},{0x00002606, +2597},
         {0x0000266a, +2552},{0x00003000,  +135},{0x00003001, +4698},{0x00003002, +6235},
         {0x00003005, +1394},{0x0000300c, -1279},{0x0000300d, +1287},{0x0000300f,  +715},
@@ -798,7 +798,7 @@ static int hcbudoux_impl_compute_score_ja_knbc(uint32_t utf32_prev3, uint32_t ut
         {0x0000ff09, +3421},{0x0000ff0c, +3439},{0x0000ff0e, +1817},{0x0000ff10, -1020},
         {0x0000ff11,  -613},{0x0000ff1a,  +274},{0x0000ff1e,  +525},{0x0000ff1f, +3231},
         {0x0000ff3b, -1052},{0x0000ff3d, +2051},{0x0000ff4f,  -652},};
-  static hcbudoux_impl_item1 const uw4[] = {
+  static const hcbudoux_impl_item1 uw4[] = {
         {0x0000201d,  -962},{0x00002026, -2878},{0x00002212,   -13},{0x00002605,   -97},
         {0x00002606, -1095},{0x0000266a, -1471},{0x00003001, -7199},{0x00003002, -6700},
         {0x0000300c, +2362},{0x0000300d, -4983},{0x0000300e,  +617},{0x0000300f, -3229},
@@ -847,7 +847,7 @@ static int hcbudoux_impl_compute_score_ja_knbc(uint32_t utf32_prev3, uint32_t ut
         {0x0000ff0e, -2805},{0x0000ff10,  -265},{0x0000ff11,  +823},{0x0000ff12,  +686},
         {0x0000ff13,   +85},{0x0000ff15,  +136},{0x0000ff1f, -3024},{0x0000ff3b,  +965},
         {0x0000ff3d, -1306},{0x0000ff3e,  -186},{0x0000ff4f,  -602},};
-  static hcbudoux_impl_item1 const uw5[] = {
+  static const hcbudoux_impl_item1 uw5[] = {
         {0x00002026,   -28},{0x00003000,  -399},{0x00003001,  -915},{0x00003002, -1588},
         {0x00003005,  +947},{0x0000300d, -1124},{0x00003042,  -182},{0x00003044,  +363},
         {0x00003046,  +485},{0x00003048,  +631},{0x0000304b,  +202},{0x0000304c,  -546},
@@ -874,7 +874,7 @@ static int hcbudoux_impl_compute_score_ja_knbc(uint32_t utf32_prev3, uint32_t ut
         {0x000096fb,  -176},{0x0000ff01,  -439},{0x0000ff09,    -4},{0x0000ff0e,  -126},
         {0x0000ff11,    -9},{0x0000ff1f,  -237},{0x0000ff2e,  +140},{0x0000ff3d,  -518},
         {0x0000ff4f,   +27},};
-  static hcbudoux_impl_item1 const uw6[] = {
+  static const hcbudoux_impl_item1 uw6[] = {
         {0x00003001,   +50},{0x00003002,  -368},{0x00003044,  +221},{0x00003046,  -135},
         {0x0000304a,   +58},{0x0000304b,  +140},{0x0000304c,  +197},{0x0000304d,   +74},
         {0x0000304f,  +121},{0x00003051,   -78},{0x00003053,   -30},{0x00003054,  +487},
@@ -896,7 +896,7 @@ static int hcbudoux_impl_compute_score_ja_knbc(uint32_t utf32_prev3, uint32_t ut
         {0x00007530,  +214},{0x00007684,  +129},{0x0000795e,  +704},{0x00008fbc,  +938},
         {0x00009001, -1163},{0x0000904e,  +701},{0x00009593,   -37},{0x0000ff10,  +537},
         {0x0000ff1a,   +20},{0x0000ff33,   -99},{0x0000ff3d,   -80},};
-  static hcbudoux_impl_item2 const bw1[] = {
+  static const hcbudoux_impl_item2 bw1[] = {
         {UINT64_C(0x0000000600203068),  +634},{UINT64_C(0x0000000600204eca),   +23},{UINT64_C(0x000000060040300d),  +318},{UINT64_C(0x00000006004030fb), +2399},
         {UINT64_C(0x0000000608803001),   -87},{UINT64_C(0x0000000608803046),  +599},{UINT64_C(0x000000060880304b),    -4},{UINT64_C(0x000000060880305f),  +221},
         {UINT64_C(0x0000000608803067),  -652},{UINT64_C(0x000000060880306e),  -587},{UINT64_C(0x0000000608803082),  -460},{UINT64_C(0x000000060880308b),   +20},
@@ -933,7 +933,7 @@ static int hcbudoux_impl_compute_score_ja_knbc(uint32_t utf32_prev3, uint32_t ut
         {UINT64_C(0x0000000ce0008fd1),  +982},{UINT64_C(0x0000000d82e0304c),  +161},{UINT64_C(0x0000000e7fc05728),  +542},{UINT64_C(0x0000000ed080306a),  +187},
         {UINT64_C(0x0000001131603066),   -42},{UINT64_C(0x0000001196e03044),  -647},{UINT64_C(0x00000012df608eca),  +146},{UINT64_C(0x0000001fe020ff01),  +148},
         {UINT64_C(0x0000001fe2005186),  +573},{UINT64_C(0x0000001fe7c0ff3e),  +208},};
-  static hcbudoux_impl_item2 const bw2[] = {
+  static const hcbudoux_impl_item2 bw2[] = {
         {UINT64_C(0x000000060020305d), -1469},{UINT64_C(0x0000000600203068),  -991},{UINT64_C(0x0000000600206e05),  -676},{UINT64_C(0x000000060020ff11),  -872},
         {UINT64_C(0x0000000608803044),  -322},{UINT64_C(0x0000000608803057),  -194},{UINT64_C(0x000000060880305f),  -599},{UINT64_C(0x0000000608803064),  -213},
         {UINT64_C(0x0000000608803068),  -365},{UINT64_C(0x000000060880306a),  -106},{UINT64_C(0x000000060880307e),  -207},{UINT64_C(0x0000000608803082),  +553},
@@ -958,7 +958,7 @@ static int hcbudoux_impl_compute_score_ja_knbc(uint32_t utf32_prev3, uint32_t ut
         {UINT64_C(0x0000000611603088),   -75},{UINT64_C(0x0000000611a03046),   -27},{UINT64_C(0x0000000617203067),  +468},{UINT64_C(0x000000061f6030fb), -1230},
         {UINT64_C(0x000000061f80306a),  +302},{UINT64_C(0x00000009d740304c),  +903},{UINT64_C(0x0000000a81003044),   +60},{UINT64_C(0x0000000bc5e096fb), -1479},
         {UINT64_C(0x0000000cbca0672c),  -510},};
-  static hcbudoux_impl_item2 const bw3[] = {
+  static const hcbudoux_impl_item2 bw3[] = {
         {UINT64_C(0x0000000608403068),  +329},{UINT64_C(0x000000060840308b),  -243},{UINT64_C(0x0000000608803044),  +989},{UINT64_C(0x0000000608803046),  +616},
         {UINT64_C(0x000000060880304b),  +400},{UINT64_C(0x000000060880305f),   -21},{UINT64_C(0x0000000608803066),  -569},{UINT64_C(0x000000060880306e),  -425},
         {UINT64_C(0x0000000608803089),  +547},{UINT64_C(0x000000060880308b),   +98},{UINT64_C(0x000000060880308d),  +383},{UINT64_C(0x0000000608c0304b),   -82},
@@ -989,7 +989,7 @@ static int hcbudoux_impl_compute_score_ja_knbc(uint32_t utf32_prev3, uint32_t ut
         {UINT64_C(0x00000009d58090fd),   +75},{UINT64_C(0x00000009dca0524d),  +272},{UINT64_C(0x0000000a3320771f),   +89},{UINT64_C(0x0000000a3f406765),  -259},
         {UINT64_C(0x0000000cdf003044),  +180},{UINT64_C(0x0000000d2fa03057),  +341},{UINT64_C(0x0000000f2da0308a),  +295},{UINT64_C(0x0000001000603048),  +381},
         {UINT64_C(0x000000110980304d),  -255},};
-  static hcbudoux_impl_item3 const tw1[] = {
+  static const hcbudoux_impl_item3 tw1[] = {
         {UINT64_C(0x00c004060ba0308c),   +24},{UINT64_C(0x00c110060be03044),  +874},{UINT64_C(0x00c110060c60305f),   +90},{UINT64_C(0x00c12c060d40304b),  +899},
         {UINT64_C(0x00c12c060d40308a), +1958},{UINT64_C(0x00c13c060aa03093),  +149},{UINT64_C(0x00c13c0611203044),  +192},{UINT64_C(0x00c14c060d00306f),   -23},
         {UINT64_C(0x00c14c060d003082),  -243},{UINT64_C(0x00c15c0609603057), +2177},{UINT64_C(0x00c174060ae03066),  +553},{UINT64_C(0x00c174061180306f),  -297},
@@ -999,13 +999,13 @@ static int hcbudoux_impl_compute_score_ja_knbc(uint32_t utf32_prev3, uint32_t ut
         {UINT64_C(0x00c1f8060ae0305f),  -410},{UINT64_C(0x00c210060de0308a), +1799},{UINT64_C(0x00c21c0608c03069),   +99},{UINT64_C(0x00c2200608c0306a), +1249},
         {UINT64_C(0x00c2200608c0306b),  -167},{UINT64_C(0x00c224060d403044),   +23},{UINT64_C(0x00c234060880308d),  +276},{UINT64_C(0x00c384061f8030eb),   +32},
         {UINT64_C(0x00c3ec061f6030fb), +1545},{UINT64_C(0x03fc401fe2005186),  +119},};
-  static hcbudoux_impl_item3 const tw2[] = {
+  static const hcbudoux_impl_item3 tw2[] = {
         {UINT64_C(0x00c118060d60306a),  -238},{UINT64_C(0x00c120060cc03044),   +41},{UINT64_C(0x00c12c0610403057), -1010},{UINT64_C(0x00c12c061120306a),  -448},
         {UINT64_C(0x00c15c0609603057),   -18},{UINT64_C(0x00c15c060960306a),  +439},{UINT64_C(0x00c15c060cc0304a),    -4},{UINT64_C(0x00c174060dc05f8c),  -862},
         {UINT64_C(0x00c174061040305d), -1308},{UINT64_C(0x00c1740611804ee5),  +283},{UINT64_C(0x00c18c060cc03053),   -89},{UINT64_C(0x00c19c060de0306a), -1392},
         {UINT64_C(0x00c19c0610403042), -1008},{UINT64_C(0x00c19c061040306a),  -767},{UINT64_C(0x00c1a00609803042),  -930},{UINT64_C(0x00c1a00609803067),   -65},
         {UINT64_C(0x00c1a00610403042),  -529},{UINT64_C(0x00c1a80608803068),   -65},{UINT64_C(0x00c24c060ce03044), -1933},{UINT64_C(0x01b05c060d605165), -3050},};
-  static hcbudoux_impl_item3 const tw3[] = {
+  static const hcbudoux_impl_item3 tw3[] = {
         {UINT64_C(0x00c004060840308b), -2408},{UINT64_C(0x00c004060d403093),   -14},{UINT64_C(0x00c004060fc0305f),  -993},{UINT64_C(0x00c1100609e03089),    +9},
         {UINT64_C(0x00c1180608803046),  -198},{UINT64_C(0x00c164060a603068),  +750},{UINT64_C(0x00c1980608803046),  +556},{UINT64_C(0x00c198060880305f),  -666},
         {UINT64_C(0x00c198060880308b), -1516},{UINT64_C(0x00c198060ae0307e), -1571},{UINT64_C(0x00c19c0608403063),  -751},{UINT64_C(0x00c19c060840308b),  -995},
@@ -1013,7 +1013,7 @@ static int hcbudoux_impl_compute_score_ja_knbc(uint32_t utf32_prev3, uint32_t ut
         {UINT64_C(0x00c1a0060ae03066),  +288},{UINT64_C(0x00c1a0060d403063),  +302},{UINT64_C(0x00c1a01140003063), -1172},{UINT64_C(0x00c1ac060ae03066),  -206},
         {UINT64_C(0x00c1ac060d403063),  -130},{UINT64_C(0x00c1bc060ba0308c),  -708},{UINT64_C(0x00c1bc060d403044),  -323},{UINT64_C(0x00c1c00608803044),  -440},
         {UINT64_C(0x00c2080608803044),  -363},{UINT64_C(0x00c224060d403044), -1196},{UINT64_C(0x00c22c060a603068),  -344},{UINT64_C(0x03fcf409d58090fd),  -200},};
-  static hcbudoux_impl_item3 const tw4[] = {
+  static const hcbudoux_impl_item3 tw4[] = {
         {UINT64_C(0x00c108060be0308a),   -59},{UINT64_C(0x00c108061140307e),  -203},{UINT64_C(0x00c1100609003070),  +499},{UINT64_C(0x00c110060960306a),  +676},
         {UINT64_C(0x00c110060a20306a),   -37},{UINT64_C(0x00c110060c603071),  +264},{UINT64_C(0x00c1100611603002),  +125},{UINT64_C(0x00c1100611a03044),  +757},
         {UINT64_C(0x00c118060d203093),  +631},{UINT64_C(0x00c1280608803057),   +80},{UINT64_C(0x00c12c060d40308a), +2037},{UINT64_C(0x00c13c0611203044), +1922},
@@ -1027,7 +1027,7 @@ static int hcbudoux_impl_compute_score_ja_knbc(uint32_t utf32_prev3, uint32_t ut
         {UINT64_C(0x00c208060c20308d), +1816},{UINT64_C(0x00c210060c603066),  +267},{UINT64_C(0x00c2200608c0306a), -1169},{UINT64_C(0x00c2200608c0306b),  -994},
         {UINT64_C(0x00c224060ae03044),  +403},{UINT64_C(0x00c23c060a203067),  -246},{UINT64_C(0x00c2f4061aa030c8),  +806},{UINT64_C(0x00c384061f8030eb),  +367},
         {UINT64_C(0x0226cc0a29205730),  +197},{UINT64_C(0x022800060c603066),   -99},};
-  static int const base =  -2816;
+  static const int base =  -2816;
   return hcbudoux_impl_compute_score_from_tables(
       base, uw1, (int)(sizeof(uw1) / sizeof(uw1[0])), uw2, (int)(sizeof(uw2) / sizeof(uw2[0])), uw3,
       (int)(sizeof(uw3) / sizeof(uw3[0])), uw4, (int)(sizeof(uw4) / sizeof(uw4[0])), uw5,
@@ -1043,7 +1043,7 @@ static int hcbudoux_impl_compute_score_ja_knbc(uint32_t utf32_prev3, uint32_t ut
 #if defined(HCBUDOUX_USE_TH) && (HCBUDOUX_USE_TH)
 static int hcbudoux_impl_compute_score_th(uint32_t utf32_prev3, uint32_t utf32_prev2, uint32_t utf32_prev1,
                                           uint32_t utf32_current, uint32_t utf32_next1, uint32_t utf32_next2) {
-  static hcbudoux_impl_item1 const uw1[] = {
+  static const hcbudoux_impl_item1 uw1[] = {
         {0x00000020,  -303},{0x00000025, -1726},{0x0000002b,   -23},{0x0000002d,  -240},
         {0x0000002e,   +79},{0x00000031,   -76},{0x00000032,  -406},{0x00000033,   +28},
         {0x00000035,   +19},{0x00000039,  -285},{0x00000042,  -554},{0x00000048,  -266},
@@ -1062,7 +1062,7 @@ static int hcbudoux_impl_compute_score_th(uint32_t utf32_prev3, uint32_t utf32_p
         {0x00000e38,   -89},{0x00000e40,  +454},{0x00000e41,  +577},{0x00000e42,  +446},
         {0x00000e43, +1868},{0x00000e44, +1349},{0x00000e46,   -20},{0x00000e47,  -235},
         {0x00000e49,   +97},{0x00000e4c,   -62},{0x00002571, +1033},};
-  static hcbudoux_impl_item1 const uw2[] = {
+  static const hcbudoux_impl_item1 uw2[] = {
         {0x00000020,  -743},{0x00000021,  +221},{0x00000027,  -208},{0x0000002e,  +152},
         {0x00000030,  +402},{0x00000031,  +273},{0x00000035,   +21},{0x00000038,  -192},
         {0x0000003f,   +84},{0x00000041,   -23},{0x00000043,  -894},{0x00000044,  -232},
@@ -1083,7 +1083,7 @@ static int hcbudoux_impl_compute_score_th(uint32_t utf32_prev3, uint32_t utf32_p
         {0x00000e40, -2180},{0x00000e41,  -485},{0x00000e42, -1027},{0x00000e43,  +947},
         {0x00000e44,  +753},{0x00000e47,  +347},{0x00000e48,  +321},{0x00000e49,  +413},
         {0x00000e4b,  +788},{0x00000e4c,  +114},{0x00002014,  +243},};
-  static hcbudoux_impl_item1 const uw3[] = {
+  static const hcbudoux_impl_item1 uw3[] = {
         {0x00000020, +4150},{0x00000021, +2180},{0x00000022, +1837},{0x00000025,  +476},
         {0x00000028, +1340},{0x00000029, +1982},{0x0000002b,  +801},{0x0000002d, +1858},
         {0x0000002e, +1110},{0x0000002f,  +871},{0x00000030,  +194},{0x00000031,   -99},
@@ -1108,7 +1108,7 @@ static int hcbudoux_impl_compute_score_th(uint32_t utf32_prev3, uint32_t utf32_p
         {0x00000e4c, +1318},{0x0000200b, -3387},{0x00002014, +2611},{0x00002018, +2391},
         {0x00002019,  +175},{0x0000201c, +3487},{0x00002026, +1806},{0x00002571, +1265},
         {0x00003160, +2154},{0x0000fe0f, +1355},};
-  static hcbudoux_impl_item1 const uw4[] = {
+  static const hcbudoux_impl_item1 uw4[] = {
         {0x00000020, +4562},{0x00000021, +3001},{0x00000022, +2854},{0x00000025, +1299},
         {0x00000026,  -401},{0x00000027, +2061},{0x00000029, +2880},{0x0000002a, +1411},
         {0x0000002b,  +610},{0x0000002d, +2083},{0x0000002e,   -59},{0x0000002f, +1206},
@@ -1137,7 +1137,7 @@ static int hcbudoux_impl_compute_score_th(uint32_t utf32_prev3, uint32_t utf32_p
         {0x00000e48, -6076},{0x00000e49, -6080},{0x00000e4a, -1961},{0x00000e4b, -1314},
         {0x00000e4c, -3210},{0x0000200b, +3044},{0x00002014,  +655},{0x00002019, +1549},
         {0x0000201d, +4154},{0x00003160, +1070},};
-  static hcbudoux_impl_item1 const uw5[] = {
+  static const hcbudoux_impl_item1 uw5[] = {
         {0x00000020,  -471},{0x00000025,  -433},{0x0000002c,  -134},{0x0000002d,  +250},
         {0x0000002e,   +40},{0x0000002f,  +163},{0x00000030,  +104},{0x00000031,  +411},
         {0x00000032,  -612},{0x00000033,  -161},{0x00000034,  +156},{0x00000035,  +480},
@@ -1158,7 +1158,7 @@ static int hcbudoux_impl_compute_score_th(uint32_t utf32_prev3, uint32_t utf32_p
         {0x00000e41,  -551},{0x00000e42,  -165},{0x00000e43,   -88},{0x00000e44,  -951},
         {0x00000e46,  -528},{0x00000e47,  +858},{0x00000e48, +2005},{0x00000e49, +1409},
         {0x00000e4a,  +769},{0x00000e4b,  +237},{0x00000e4c, -3175},{0x0000fe0f, +1030},};
-  static hcbudoux_impl_item1 const uw6[] = {
+  static const hcbudoux_impl_item1 uw6[] = {
         {0x00000020,  -292},{0x00000021,  -600},{0x00000028, -1050},{0x00000029,   -20},
         {0x0000002e,   +15},{0x00000030,  +373},{0x00000031,   +41},{0x00000032,  -109},
         {0x00000038,  -353},{0x00000039,  +228},{0x0000003a,  +244},{0x00000044, -1206},
@@ -1177,7 +1177,7 @@ static int hcbudoux_impl_compute_score_th(uint32_t utf32_prev3, uint32_t utf32_p
         {0x00000e40,  +217},{0x00000e41,   -76},{0x00000e42,  +280},{0x00000e44,  -195},
         {0x00000e46,  +374},{0x00000e47,  +397},{0x00000e48,  +397},{0x00000e49,  +634},
         {0x00000e4a, +1164},{0x00000e4b, +1012},{0x00000e4c, -2331},};
-  static hcbudoux_impl_item2 const bw1[] = {
+  static const hcbudoux_impl_item2 bw1[] = {
         {UINT64_C(0x0000000004000020),  +538},{UINT64_C(0x0000000004000027), +2309},{UINT64_C(0x0000000004000028), +3062},{UINT64_C(0x000000000400002d), +1262},
         {UINT64_C(0x0000000004000036),   +17},{UINT64_C(0x0000000004000037),  +447},{UINT64_C(0x0000000004000052),  -166},{UINT64_C(0x0000000004000054),  -153},
         {UINT64_C(0x000000000400005f),  -577},{UINT64_C(0x0000000004000e13),  -570},{UINT64_C(0x0000000004000e19),  -422},{UINT64_C(0x0000000005a00020),  +642},
@@ -1246,7 +1246,7 @@ static int hcbudoux_impl_compute_score_th(uint32_t utf32_prev3, uint32_t utf32_p
         {UINT64_C(0x00000001c9000020),   +27},{UINT64_C(0x00000001c9000e19),  +146},{UINT64_C(0x00000001c9000e27),  -108},{UINT64_C(0x00000001c9000e2d),  +100},
         {UINT64_C(0x00000001c9000e30),  +953},{UINT64_C(0x00000001c9000e32),  +766},{UINT64_C(0x00000001c9200e19),  -109},{UINT64_C(0x00000001c9200e22),  +366},
         {UINT64_C(0x00000001c9200e27),  +156},{UINT64_C(0x00000001c9200e2d),  +208},{UINT64_C(0x00000001c9200e32),  +675},{UINT64_C(0x00000001c9800020),  -394},};
-  static hcbudoux_impl_item2 const bw2[] = {
+  static const hcbudoux_impl_item2 bw2[] = {
         {UINT64_C(0x0000000004000020), -3208},{UINT64_C(0x0000000004000028),  +300},{UINT64_C(0x0000000004000030),  +920},{UINT64_C(0x0000000004000031),  +329},
         {UINT64_C(0x0000000004000032),  -865},{UINT64_C(0x0000000004000041), -1170},{UINT64_C(0x0000000004000043),  -127},{UINT64_C(0x0000000004000045),  +274},
         {UINT64_C(0x0000000004000047),  +499},{UINT64_C(0x0000000004000048), -1751},{UINT64_C(0x000000000400004d),   -38},{UINT64_C(0x000000000400004e),  -695},
@@ -1318,7 +1318,7 @@ static int hcbudoux_impl_compute_score_th(uint32_t utf32_prev3, uint32_t utf32_p
         {UINT64_C(0x00000001c9200e2d), -1186},{UINT64_C(0x00000001c9200e40),  +381},{UINT64_C(0x00000001c9200e42),   +79},{UINT64_C(0x00000001c9200e44),  -408},
         {UINT64_C(0x00000001c9800020), -1456},{UINT64_C(0x00000001c980002e),  +129},{UINT64_C(0x00000001c9800e1e),   +14},{UINT64_C(0x00000001c9800e22),  +292},
         {UINT64_C(0x00000001c9800e40),  -573},{UINT64_C(0x00000001c9800e44),  +362},};
-  static hcbudoux_impl_item2 const bw3[] = {
+  static const hcbudoux_impl_item2 bw3[] = {
         {UINT64_C(0x0000000004000020),  +405},{UINT64_C(0x0000000004000028),   +31},{UINT64_C(0x000000000400002d),  +539},{UINT64_C(0x000000000400003a),  +190},
         {UINT64_C(0x0000000004000041), -1276},{UINT64_C(0x0000000004000048),  -653},{UINT64_C(0x000000000400004d),  -513},{UINT64_C(0x000000000400004e), -1153},
         {UINT64_C(0x0000000004000050),   -26},{UINT64_C(0x0000000004000052),  -216},{UINT64_C(0x0000000004000053),  -650},{UINT64_C(0x0000000004000055), -1135},
@@ -1395,7 +1395,7 @@ static int hcbudoux_impl_compute_score_th(uint32_t utf32_prev3, uint32_t utf32_p
         {UINT64_C(0x00000001c8600e19),  +519},{UINT64_C(0x00000001c8800e0b),  -695},{UINT64_C(0x00000001c8800e14),  +739},{UINT64_C(0x00000001c8800e1b), +2861},
         {UINT64_C(0x00000001c8800e1f),   +49},{UINT64_C(0x00000001c8800e23),  -814},{UINT64_C(0x00000001c8800e2b),   +68},{UINT64_C(0x00000001c8c00020),  +538},
         {UINT64_C(0x0000000403200020), +1306},};
-  static hcbudoux_impl_item3 const tw1[] = {
+  static const hcbudoux_impl_item3 tw1[] = {
         {UINT64_C(0x000080000a000041),  +711},{UINT64_C(0x00008001c0e00e07),  +430},{UINT64_C(0x00008001c1400e32),  +396},{UINT64_C(0x00008001c2600020), -1447},
         {UINT64_C(0x00008001c2e00e33),  -190},{UINT64_C(0x00008001c3600e35), +1887},{UINT64_C(0x00008001c3c00e2d),  +358},{UINT64_C(0x00008001c4200e32),  +196},
         {UINT64_C(0x00008001c4200e35),  -345},{UINT64_C(0x00008001c4600e1a),  +905},{UINT64_C(0x00008001c5400e19),  +365},{UINT64_C(0x00008001c5a00e30), -1111},
@@ -1478,7 +1478,7 @@ static int hcbudoux_impl_compute_score_th(uint32_t utf32_prev3, uint32_t utf32_p
         {UINT64_C(0x00392001c6400e19),  +918},{UINT64_C(0x00392001c6400e22), +1185},{UINT64_C(0x00392401c0200e30),  +374},{UINT64_C(0x00392401c4e00e22),  +821},
         {UINT64_C(0x00392401c5a00e19), +1306},{UINT64_C(0x00392401c5a00e21),  +579},{UINT64_C(0x00392401c6400020), -1483},{UINT64_C(0x00392401c6400e07),  +741},
         {UINT64_C(0x00392401c6400e22),  +299},{UINT64_C(0x00392401c6400e2d),  -333},};
-  static hcbudoux_impl_item3 const tw2[] = {
+  static const hcbudoux_impl_item3 tw2[] = {
         {UINT64_C(0x0000b8000400002e), -1481},{UINT64_C(0x0000d40004000e1b),  -324},{UINT64_C(0x0000d40006a00020), -1107},{UINT64_C(0x0000e0000700002d),  -399},
         {UINT64_C(0x0000e80004000020),  -994},{UINT64_C(0x000190000c200020),  -693},{UINT64_C(0x0001940004000048),   -11},{UINT64_C(0x0001a4000dc00020),   +40},
         {UINT64_C(0x0001d0000f200020),  -661},{UINT64_C(0x00380401c6400e23),  -635},{UINT64_C(0x00380801c3200e2a), -1595},{UINT64_C(0x00380801c5a00e1a),  -298},
@@ -1531,7 +1531,7 @@ static int hcbudoux_impl_compute_score_th(uint32_t utf32_prev3, uint32_t utf32_p
         {UINT64_C(0x00392401c6400e17),  -303},{UINT64_C(0x00392401c6400e21), +1351},{UINT64_C(0x00392401c6400e23),  +569},{UINT64_C(0x00392401c6400e43),  -148},
         {UINT64_C(0x00392401c6400e44),  +292},{UINT64_C(0x00392401c6600e21), -1133},{UINT64_C(0x00392401c8c00e46), -1134},{UINT64_C(0x0039300004000e18), -1306},
         {UINT64_C(0x0039300004000e44),  -855},};
-  static hcbudoux_impl_item3 const tw3[] = {
+  static const hcbudoux_impl_item3 tw3[] = {
         {UINT64_C(0x0000800004000e21), -1513},{UINT64_C(0x000080000900006f),  -593},{UINT64_C(0x000080000a600068),  -200},{UINT64_C(0x00008001c0200e31), -1315},
         {UINT64_C(0x00008001c1000e23), -1161},{UINT64_C(0x00008001c3400e32),  -346},{UINT64_C(0x00008001c3400e49),  -814},{UINT64_C(0x00008001c3600e32), -1703},
         {UINT64_C(0x00008001c3c00e32),  -552},{UINT64_C(0x00008001c4600e39), -1711},{UINT64_C(0x00008001c4e00e07),  +170},{UINT64_C(0x00008001c4e00e2d),  -823},
@@ -1582,7 +1582,7 @@ static int hcbudoux_impl_compute_score_th(uint32_t utf32_prev3, uint32_t utf32_p
         {UINT64_C(0x00392001c2e00e33), -1892},{UINT64_C(0x00392001c4e00e48), -1653},{UINT64_C(0x00392001c5400e38), -1902},{UINT64_C(0x00392001c5600e49), -1288},
         {UINT64_C(0x00392001c5a00e22), -1015},{UINT64_C(0x00392401c2c00e36),  -691},{UINT64_C(0x00392401c4200e31),   -37},{UINT64_C(0x00392401c4e00e48),  +727},
         {UINT64_C(0x00392401c8200e1a),  -167},{UINT64_C(0x0039300004000e18), -1107},{UINT64_C(0x00393001c5400e34),  -198},};
-  static hcbudoux_impl_item3 const tw4[] = {
+  static const hcbudoux_impl_item3 tw4[] = {
         {UINT64_C(0x0000000004000032),  -753},{UINT64_C(0x0000000004000033),  -150},{UINT64_C(0x0000000004200021), +1197},{UINT64_C(0x0000000006a00030),  +160},
         {UINT64_C(0x00000001c0200e14),  +280},{UINT64_C(0x00000001c0800e30),  +804},{UINT64_C(0x00000001c320002e),  +148},{UINT64_C(0x00000001c3600e35),  +203},
         {UINT64_C(0x00000001c4200e30),    +2},{UINT64_C(0x00000001c4a00e07),   -14},{UINT64_C(0x00000001c5a00e30),  +538},{UINT64_C(0x00000001c8c00e46),   +46},
@@ -1668,7 +1668,7 @@ static int hcbudoux_impl_compute_score_th(uint32_t utf32_prev3, uint32_t utf32_p
         {UINT64_C(0x00391001c3600e44), -1756},{UINT64_C(0x00391001c4200e48), +4224},{UINT64_C(0x00391001c4600e1a),  -389},{UINT64_C(0x00391001c4600e49),  +313},
         {UINT64_C(0x00391001c4a00e19), -1832},{UINT64_C(0x00391001c4e00e49),  +496},{UINT64_C(0x00391001c5600e19), +1182},{UINT64_C(0x00391001c5600e21), +2377},
         {UINT64_C(0x00391001c5600e23),  -677},};
-  static int const base =  -4401;
+  static const int base =  -4401;
   return hcbudoux_impl_compute_score_from_tables(
       base, uw1, (int)(sizeof(uw1) / sizeof(uw1[0])), uw2, (int)(sizeof(uw2) / sizeof(uw2[0])), uw3,
       (int)(sizeof(uw3) / sizeof(uw3[0])), uw4, (int)(sizeof(uw4) / sizeof(uw4[0])), uw5,
@@ -1684,7 +1684,7 @@ static int hcbudoux_impl_compute_score_th(uint32_t utf32_prev3, uint32_t utf32_p
 #if defined(HCBUDOUX_USE_ZH_HANS) && (HCBUDOUX_USE_ZH_HANS)
 static int hcbudoux_impl_compute_score_zh_hans(uint32_t utf32_prev3, uint32_t utf32_prev2, uint32_t utf32_prev1,
                                                uint32_t utf32_current, uint32_t utf32_next1, uint32_t utf32_next2) {
-  static hcbudoux_impl_item1 const uw1[] = {
+  static const hcbudoux_impl_item1 uw1[] = {
         {0x00000030,  -309},{0x00000032,   -50},{0x0000004f,   -66},{0x0000006e,  +227},
         {0x000000b7,   -16},{0x0000201c,  +480},{0x0000201d,   +26},{0x00003001,  +510},
         {0x00003002,  +145},{0x0000300a,  +249},{0x0000300b,   +20},{0x0000300c,  +475},
@@ -1801,7 +1801,7 @@ static int hcbudoux_impl_compute_score_zh_hans(uint32_t utf32_prev3, uint32_t ut
         {0x0000ff18,  -499},{0x0000ff19,  -629},{0x0000ff1a,  +346},{0x0000ff1b,  +184},
         {0x0000ff39,  +158},{0x0000ff3b,  -761},{0x0000ff41,  -480},{0x0000ff45,  -194},
         {0x0000ff54,   +14},};
-  static hcbudoux_impl_item1 const uw2[] = {
+  static const hcbudoux_impl_item1 uw2[] = {
         {0x0000004f,   -59},{0x00000053,  -554},{0x00000054,  -445},{0x0000006e,  -368},
         {0x000000b7, -3160},{0x0000201c, -1116},{0x0000201d,  -845},{0x000025cb,  -953},
         {0x00003001,  -929},{0x00003002,  -952},{0x0000300a, -1360},{0x0000300b,  -119},
@@ -1956,7 +1956,7 @@ static int hcbudoux_impl_compute_score_zh_hans(uint32_t utf32_prev3, uint32_t ut
         {0x0000ff14,  +686},{0x0000ff15,   +86},{0x0000ff16,  +742},{0x0000ff19,  -208},
         {0x0000ff1a,  -844},{0x0000ff1b,  -412},{0x0000ff1f,  -621},{0x0000ff3b,   -86},
         {0x0000ff41, -1223},{0x0000ff57,  -825},};
-  static hcbudoux_impl_item1 const uw3[] = {
+  static const hcbudoux_impl_item1 uw3[] = {
         {0x00000030,  -191},{0x00000032,  -341},{0x00000038,   +10},{0x00000042,  -361},
         {0x0000004e,  -127},{0x0000004f,   -89},{0x00000050,   -90},{0x00000054,  -184},
         {0x00000061,  -538},{0x00000065,   -88},{0x0000006f,  -176},{0x000000b7,  -426},
@@ -2162,7 +2162,7 @@ static int hcbudoux_impl_compute_score_zh_hans(uint32_t utf32_prev3, uint32_t ut
         {0x0000ff19,  -198},{0x0000ff1a, +1872},{0x0000ff1b, +3108},{0x0000ff1f, +3262},
         {0x0000ff2b,  +760},{0x0000ff3b, -1978},{0x0000ff3d,  +542},{0x0000ff41, -1120},
         {0x0000ff45,  -677},{0x0000ff4f,  -395},{0x0000ff54,   -58},{0x0000ff57,   -89},};
-  static hcbudoux_impl_item1 const uw4[] = {
+  static const hcbudoux_impl_item1 uw4[] = {
         {0x00000030, -1421},{0x00000031,  +102},{0x00000035,  -381},{0x00000039,  -346},
         {0x0000004f,  -281},{0x00000053,   -21},{0x00000061,  -675},{0x00000065, -1011},
         {0x0000006e,  -607},{0x0000006f,  -586},{0x00000073,  -275},{0x000000b7,  -760},
@@ -2385,7 +2385,7 @@ static int hcbudoux_impl_compute_score_zh_hans(uint32_t utf32_prev3, uint32_t ut
         {0x0000ff39,  +292},{0x0000ff3b,  +100},{0x0000ff3d, -1827},{0x0000ff41, -1324},
         {0x0000ff43,  -102},{0x0000ff45, -1257},{0x0000ff4d,   -59},{0x0000ff4f, -1181},
         {0x0000ff54,  -471},};
-  static hcbudoux_impl_item1 const uw5[] = {
+  static const hcbudoux_impl_item1 uw5[] = {
         {0x00000031,  +160},{0x00000041,  -263},{0x00000053,  -666},{0x00000065,  -285},
         {0x0000007e,   -28},{0x000000b7, -1325},{0x0000201c,  -264},{0x0000201d,  -930},
         {0x00003001, -1355},{0x00003002, -1248},{0x0000300a,  -328},{0x0000300b, -1016},
@@ -2542,7 +2542,7 @@ static int hcbudoux_impl_compute_score_zh_hans(uint32_t utf32_prev3, uint32_t ut
         {0x0000ff19,   -36},{0x0000ff1a,  -368},{0x0000ff1b, -1083},{0x0000ff1f,  -370},
         {0x0000ff2b, -1349},{0x0000ff3d,  -312},{0x0000ff41,  -803},{0x0000ff45, -1579},
         {0x0000ff4f, -1451},};
-  static hcbudoux_impl_item1 const uw6[] = {
+  static const hcbudoux_impl_item1 uw6[] = {
         {0x00000030,  +186},{0x00000065,  -346},{0x0000201c,  +142},{0x0000201d,  +295},
         {0x00003001,  +305},{0x00003002,  +483},{0x0000300a,   +34},{0x0000300b,  +651},
         {0x0000300c,  +303},{0x0000300d,   +29},{0x00004e00,  +206},{0x00004e03,   +77},
@@ -2666,7 +2666,7 @@ static int hcbudoux_impl_compute_score_zh_hans(uint32_t utf32_prev3, uint32_t ut
         {0x0000ff12,   -31},{0x0000ff13,  -112},{0x0000ff18,  +378},{0x0000ff19,  +176},
         {0x0000ff1a,  +434},{0x0000ff1b,  +250},{0x0000ff1f,  +399},{0x0000ff2b,  +674},
         {0x0000ff3d,   -60},{0x0000ff45, -1147},{0x0000ff4f,  +134},};
-  static hcbudoux_impl_item2 const bw1[] = {
+  static const hcbudoux_impl_item2 bw1[] = {
         {UINT64_C(0x0000000402802014),   +53},{UINT64_C(0x00000006002065b0),  +470},{UINT64_C(0x000000060040201d),   +44},{UINT64_C(0x0000000600404e00),  +397},
         {UINT64_C(0x0000000600404e2d),  -384},{UINT64_C(0x0000000600404ece),  +583},{UINT64_C(0x0000000600405168), +1539},{UINT64_C(0x00000006004053e6),   +30},
         {UINT64_C(0x0000000600405728),  +107},{UINT64_C(0x0000000600405c31),  -291},{UINT64_C(0x000000060040636e),  +136},{UINT64_C(0x000000060040800c), +1209},
@@ -2785,7 +2785,7 @@ static int hcbudoux_impl_compute_score_zh_hans(uint32_t utf32_prev3, uint32_t ut
         {UINT64_C(0x0000001fe1806bd4),  +438},{UINT64_C(0x0000001fe1807136),  -283},{UINT64_C(0x0000001fe180800c),  +631},{UINT64_C(0x0000001fe1808ba9),   +36},
         {UINT64_C(0x0000001fe1808fd9),   +62},{UINT64_C(0x0000001fe1a0ff0d), +1057},{UINT64_C(0x0000001fe2004e07),  +170},{UINT64_C(0x0000001fe220ff10),   +99},
         {UINT64_C(0x0000001fe220ff11),  +441},{UINT64_C(0x0000001fe220ff19),    -9},{UINT64_C(0x0000001fe240ff10),  +400},{UINT64_C(0x0000001fe240ff15),  -123},};
-  static hcbudoux_impl_item2 const bw2[] = {
+  static const hcbudoux_impl_item2 bw2[] = {
         {UINT64_C(0x0000000007200039), -1109},{UINT64_C(0x0000000402802014),  -950},{UINT64_C(0x00000009c0004e0b), -2338},{UINT64_C(0x00000009c0004e2a),  +813},
         {UINT64_C(0x00000009c0004e5d), -2591},{UINT64_C(0x00000009c0004e9b), -2958},{UINT64_C(0x00000009c0004ee3), +1184},{UINT64_C(0x00000009c0004ef6),  +805},
         {UINT64_C(0x00000009c0004efd), +1492},{UINT64_C(0x00000009c0004f4d), +1305},{UINT64_C(0x00000009c0005207), -2045},{UINT64_C(0x00000009c0005343),  -796},
@@ -2959,7 +2959,7 @@ static int hcbudoux_impl_compute_score_zh_hans(uint32_t utf32_prev3, uint32_t ut
         {UINT64_C(0x0000001fe1804e00), -3497},{UINT64_C(0x0000001fe1a0ff0d),  -127},{UINT64_C(0x0000001fe1c04f46),  +549},{UINT64_C(0x0000001fe1c055ef),   +94},
         {UINT64_C(0x0000001fe200591a), -1836},{UINT64_C(0x0000001fe220ff11), -1185},{UINT64_C(0x0000001fe220ff12),  -847},{UINT64_C(0x0000001fe220ff19),  -382},
         {UINT64_C(0x0000001fe240ff11),  -133},{UINT64_C(0x0000001fe320ff19),  -812},};
-  static hcbudoux_impl_item2 const bw3[] = {
+  static const hcbudoux_impl_item2 bw3[] = {
         {UINT64_C(0x0000000402802014), +1116},{UINT64_C(0x00000009c0004e2a), +1363},{UINT64_C(0x00000009c0004e5d),  +307},{UINT64_C(0x00000009c0004e9b),  +492},
         {UINT64_C(0x00000009c00065b9),  -128},{UINT64_C(0x00000009c0006837),  +255},{UINT64_C(0x00000009c0006b21),  -143},{UINT64_C(0x00000009c0006b65),  -293},
         {UINT64_C(0x00000009c00076f4),  +344},{UINT64_C(0x00000009c0008d77),  -483},{UINT64_C(0x00000009c00090e8),  +152},{UINT64_C(0x00000009c0e05143),  -283},
@@ -3089,27 +3089,27 @@ static int hcbudoux_impl_compute_score_zh_hans(uint32_t utf32_prev3, uint32_t ut
         {UINT64_C(0x00000012ec405bf9),  +769},{UINT64_C(0x000000130f2076ee),  +263},{UINT64_C(0x0000001333206e2f), +1827},{UINT64_C(0x000000135b007684),  +556},
         {UINT64_C(0x000000135b00ff0c),  +141},{UINT64_C(0x0000001fe1a0ff0d), +1512},{UINT64_C(0x0000001fe2205e74),  -308},{UINT64_C(0x0000001fe220ff11),  +196},
         {UINT64_C(0x0000001fe220ff12),   +49},{UINT64_C(0x0000001fe220ff19),  +275},{UINT64_C(0x0000001fe240ff10),   +49},{UINT64_C(0x0000001fe260ff10),  -330},};
-  static hcbudoux_impl_item3 const tw1[] = {
+  static const hcbudoux_impl_item3 tw1[] = {
         {UINT64_C(0x0138a80cc3e0671f),  +862},{UINT64_C(0x0138b40adfa04eba),  +518},{UINT64_C(0x013c280c5920514b),  +426},{UINT64_C(0x013f100feae065af),  +657},
         {UINT64_C(0x0145c40a9180515a),  +254},{UINT64_C(0x0145c40a918056fd), +1058},{UINT64_C(0x014aa00ea6a08bdd),  +486},{UINT64_C(0x014f440b8aa04e2d),  +438},
         {UINT64_C(0x01973c0c18a07ed3),  +252},{UINT64_C(0x0198bc09c0004e2a), +4030},{UINT64_C(0x019c000a81c04e00),  +839},{UINT64_C(0x01d9f809c0605341),  +219},
         {UINT64_C(0x01da101239a08981),  -569},{UINT64_C(0x01df94120a608fd9),  -138},{UINT64_C(0x0201500a810056fd), +1398},{UINT64_C(0x03fc300a7d408981),  -700},
         {UINT64_C(0x03fc441fe320ff19),  -789},{UINT64_C(0x03fc481fe200ff10), -1300},};
-  static hcbudoux_impl_item3 const tw2[] = {
+  static const hcbudoux_impl_item3 tw2[] = {
         {UINT64_C(0x00c00811fb204e2a),  +909},{UINT64_C(0x0138b40adfa04eba), -1216},{UINT64_C(0x014f441140004eba),  -235},{UINT64_C(0x015ca011fb204e2a),  +251},
         {UINT64_C(0x0167500a8b004f1a), -1430},{UINT64_C(0x016e7812c8a04e0a), -1437},{UINT64_C(0x0170c40cc5e08bf4), -4445},{UINT64_C(0x0189000ce1207684),  +211},
         {UINT64_C(0x01987c0ce3e04e00),  -356},{UINT64_C(0x01c9e40a4560662f), -4025},{UINT64_C(0x01da100b8620662f),  +725},{UINT64_C(0x01ecb009c0006b21),  -113},
         {UINT64_C(0x0201500a810056fd), -1597},{UINT64_C(0x022ec01000a04f1a),  -969},{UINT64_C(0x023f6c09c0006b65), -2127},{UINT64_C(0x03fc3009e8c0662f), -1237},
         {UINT64_C(0x03fc300a7d40662f),    -9},};
-  static hcbudoux_impl_item3 const tw3[] = {
+  static const hcbudoux_impl_item3 tw3[] = {
         {UINT64_C(0x0138000cb7209762), -1203},{UINT64_C(0x0138000d76a065f6),  +452},{UINT64_C(0x0138a80cbec05019),  -200},{UINT64_C(0x0138e809d8004e48), -3937},
         {UINT64_C(0x0149bc0c07607edf),  -464},{UINT64_C(0x014d040bce804ee3), -1267},{UINT64_C(0x015bf40a2d8053f8),  -621},{UINT64_C(0x01715409c5a056fd), -2599},
         {UINT64_C(0x019c000b24e07684), +1018},{UINT64_C(0x019d940ee160ff0c),  -146},{UINT64_C(0x019d94117e80ff0c),  -590},{UINT64_C(0x01af3c09c5404eba),   -44},
         {UINT64_C(0x02428c0cbec05019),  +604},};
-  static hcbudoux_impl_item3 const tw4[] = {
+  static const hcbudoux_impl_item3 tw4[] = {
         {UINT64_C(0x0000c80006000030),   +43},{UINT64_C(0x01382c0ceca0ff0c),  +488},{UINT64_C(0x014d5c110ae06751),  +429},{UINT64_C(0x0170c40cc5e08bf4), -1973},
         {UINT64_C(0x0197d80a0320ff0c),  -727},{UINT64_C(0x0198bc09c0004e2a),    +1},{UINT64_C(0x019d94117e80ff0c),  +701},{UINT64_C(0x01da1009c380897f),  -803},};
-  static int const base =   -249;
+  static const int base =   -249;
   return hcbudoux_impl_compute_score_from_tables(
       base, uw1, (int)(sizeof(uw1) / sizeof(uw1[0])), uw2, (int)(sizeof(uw2) / sizeof(uw2[0])), uw3,
       (int)(sizeof(uw3) / sizeof(uw3[0])), uw4, (int)(sizeof(uw4) / sizeof(uw4[0])), uw5,
@@ -3125,7 +3125,7 @@ static int hcbudoux_impl_compute_score_zh_hans(uint32_t utf32_prev3, uint32_t ut
 #if defined(HCBUDOUX_USE_ZH_HANT) && (HCBUDOUX_USE_ZH_HANT)
 static int hcbudoux_impl_compute_score_zh_hant(uint32_t utf32_prev3, uint32_t utf32_prev2, uint32_t utf32_prev1,
                                                uint32_t utf32_current, uint32_t utf32_next1, uint32_t utf32_next2) {
-  static hcbudoux_impl_item1 const uw1[] = {
+  static const hcbudoux_impl_item1 uw1[] = {
         {0x00000025,  +442},{0x00000028,  -351},{0x00000029,  +148},{0x0000002a,   +50},
         {0x0000003b,   +61},{0x00000041,   +80},{0x00000053,   -32},{0x00000061,   -42},
         {0x0000006f,   +70},{0x00000077,  +429},{0x00002013,  +158},{0x00002027,  +194},
@@ -3252,7 +3252,7 @@ static int hcbudoux_impl_compute_score_zh_hant(uint32_t utf32_prev3, uint32_t ut
         {0x0000ff0c,  +293},{0x0000ff11,  +146},{0x0000ff14,   +25},{0x0000ff15,   +88},
         {0x0000ff16,   +98},{0x0000ff17,  -199},{0x0000ff18,  +234},{0x0000ff19,  -530},
         {0x0000ff1a,  +164},};
-  static hcbudoux_impl_item1 const uw2[] = {
+  static const hcbudoux_impl_item1 uw2[] = {
         {0x00000025,  -745},{0x00000028,  -888},{0x00000029,  -606},{0x0000002a, -1838},
         {0x0000002d, -1390},{0x0000003b,  -734},{0x00000041,  -436},{0x00000044,  -130},
         {0x00000045,  -151},{0x00000048,   -36},{0x0000004d,   -99},{0x00000053,  -270},
@@ -3416,7 +3416,7 @@ static int hcbudoux_impl_compute_score_zh_hant(uint32_t utf32_prev3, uint32_t ut
         {0x0000ff0c,  -954},{0x0000ff11,  +392},{0x0000ff12,  +760},{0x0000ff13,  +462},
         {0x0000ff14,  +419},{0x0000ff16,  +735},{0x0000ff17,   +58},{0x0000ff18,   +66},
         {0x0000ff19,  +152},{0x0000ff1a,  -842},{0x0000ff1f,  -444},};
-  static hcbudoux_impl_item1 const uw3[] = {
+  static const hcbudoux_impl_item1 uw3[] = {
         {0x00000025, +2051},{0x00000028, -4223},{0x00000029, +2869},{0x0000002a, +2807},
         {0x0000002d,  +869},{0x0000003b, +4955},{0x00000041,   -61},{0x00000043,  -206},
         {0x0000004c,   -45},{0x0000004e,   -74},{0x0000004f,   +55},{0x00000052,   -54},
@@ -3635,7 +3635,7 @@ static int hcbudoux_impl_compute_score_zh_hant(uint32_t utf32_prev3, uint32_t ut
         {0x0000ff10,  -713},{0x0000ff11,  -986},{0x0000ff12,  -605},{0x0000ff13,  -795},
         {0x0000ff14,  -126},{0x0000ff16,  -133},{0x0000ff17,  -337},{0x0000ff18,  -530},
         {0x0000ff19,  -601},{0x0000ff1a, +3693},{0x0000ff1f, +1485},};
-  static hcbudoux_impl_item1 const uw4[] = {
+  static const hcbudoux_impl_item1 uw4[] = {
         {0x00000025,   +17},{0x00000028, +4042},{0x00000029, -3426},{0x0000002a, +2513},
         {0x0000002d,  +864},{0x0000003b, +3665},{0x00000041,  -272},{0x00000043,   +63},
         {0x00000044,    -8},{0x00000045,  -273},{0x00000046,  +672},{0x00000048,   -67},
@@ -3849,7 +3849,7 @@ static int hcbudoux_impl_compute_score_zh_hant(uint32_t utf32_prev3, uint32_t ut
         {0x0000ff10,  -397},{0x0000ff11,  +366},{0x0000ff12,  +322},{0x0000ff14,   -72},
         {0x0000ff15,  -489},{0x0000ff16,  -396},{0x0000ff17,  -285},{0x0000ff18,   -54},
         {0x0000ff19,  -327},{0x0000ff1a, -3716},{0x0000ff1f, -2083},};
-  static hcbudoux_impl_item1 const uw5[] = {
+  static const hcbudoux_impl_item1 uw5[] = {
         {0x00000025,  -119},{0x00000028, -1008},{0x00000029, -1175},{0x0000002a,  -662},
         {0x0000002d,  -638},{0x0000003b,  -953},{0x00000043,  -293},{0x00000044,  -132},
         {0x00000045,  -198},{0x0000004d,   -88},{0x0000004e,  -172},{0x0000004f,  -153},
@@ -4012,7 +4012,7 @@ static int hcbudoux_impl_compute_score_zh_hant(uint32_t utf32_prev3, uint32_t ut
         {0x00009ec3,  -765},{0x00009ede,  -111},{0x00009ee8,  -839},{0x0000fe50,  -278},
         {0x0000ff0c, -1273},{0x0000ff11,  -355},{0x0000ff18,  +212},{0x0000ff1a, -1431},
         {0x0000ff1f,   -81},};
-  static hcbudoux_impl_item1 const uw6[] = {
+  static const hcbudoux_impl_item1 uw6[] = {
         {0x00000025,  -436},{0x00000028,  +140},{0x00000029,   -85},{0x0000002a,  +557},
         {0x0000002d,  +214},{0x0000003b,  +294},{0x00000041,  -536},{0x00000045,   -67},
         {0x00000061,  -192},{0x00000065,   -83},{0x00000069,  -202},{0x00000072,  -322},
@@ -4142,7 +4142,7 @@ static int hcbudoux_impl_compute_score_zh_hant(uint32_t utf32_prev3, uint32_t ut
         {0x00009ee8,  +253},{0x0000ff0c,  +516},{0x0000ff10,  -129},{0x0000ff11,  +382},
         {0x0000ff13,  -318},{0x0000ff14,   -30},{0x0000ff15,  +210},{0x0000ff19,  +145},
         {0x0000ff1a,  +364},{0x0000ff1f,  +137},};
-  static hcbudoux_impl_item2 const bw1[] = {
+  static const hcbudoux_impl_item2 bw1[] = {
         {UINT64_C(0x000000000540002a), +1221},{UINT64_C(0x0000000005a0002d), +1751},{UINT64_C(0x0000000404e0ff11),  +112},{UINT64_C(0x0000000600404e00),   +12},
         {UINT64_C(0x0000000600404ed6),  +333},{UINT64_C(0x0000000600404ee5),  +419},{UINT64_C(0x0000000600404f46),  +150},{UINT64_C(0x0000000600405728),  +728},
         {UINT64_C(0x00000006004070ba),   +63},{UINT64_C(0x0000000601804e00),  +398},{UINT64_C(0x000000060180570b),  -206},{UINT64_C(0x00000009c0004e00),  -479},
@@ -4262,7 +4262,7 @@ static int hcbudoux_impl_compute_score_zh_hant(uint32_t utf32_prev3, uint32_t ut
         {UINT64_C(0x0000001fe1807d93),  +397},{UINT64_C(0x0000001fe1807f8e),  +824},{UINT64_C(0x0000001fe180800c),  +484},{UINT64_C(0x0000001fe18081ea),  +723},
         {UINT64_C(0x0000001fe1809664),  +180},{UINT64_C(0x0000001fe2002027),  -920},{UINT64_C(0x0000001fe240ff10),   -14},{UINT64_C(0x0000001fe240ff11),  +238},
         {UINT64_C(0x0000001fe240ff13),   +50},{UINT64_C(0x0000001fe240ff19),  +362},{UINT64_C(0x0000001fe260ff11),  +694},};
-  static hcbudoux_impl_item2 const bw2[] = {
+  static const hcbudoux_impl_item2 bw2[] = {
         {UINT64_C(0x000000000540002a), -6143},{UINT64_C(0x0000000005a0002d), -3041},{UINT64_C(0x0000000005a0ff12),  +787},{UINT64_C(0x00000009c0004e00), -1490},
         {UINT64_C(0x00000009c0004e5d), -2157},{UINT64_C(0x00000009c0004e9b),  -569},{UINT64_C(0x00000009c0004f4d), +1098},{UINT64_C(0x00000009c000500b),  +685},
         {UINT64_C(0x00000009c0005341), -2571},{UINT64_C(0x00000009c0005343),  -307},{UINT64_C(0x00000009c000540d),  +991},{UINT64_C(0x00000009c0005834), +1167},
@@ -4423,7 +4423,7 @@ static int hcbudoux_impl_compute_score_zh_hant(uint32_t utf32_prev3, uint32_t ut
         {UINT64_C(0x0000001fe200ff10), -1005},{UINT64_C(0x0000001fe220ff10),  -883},{UINT64_C(0x0000001fe220ff11), -1855},{UINT64_C(0x0000001fe220ff12),  -856},
         {UINT64_C(0x0000001fe240ff10),  -366},{UINT64_C(0x0000001fe240ff11),  -543},{UINT64_C(0x0000001fe240ff12),  -803},{UINT64_C(0x0000001fe240ff13),   -45},
         {UINT64_C(0x0000001fe240ff14),  -184},{UINT64_C(0x0000001fe260ff10),  -230},{UINT64_C(0x0000001fe260ff11),  -495},{UINT64_C(0x0000001fe2a09663), +1537},};
-  static hcbudoux_impl_item2 const bw3[] = {
+  static const hcbudoux_impl_item2 bw3[] = {
         {UINT64_C(0x0000000004a0ff0c), +1443},{UINT64_C(0x0000000004a0ff11),  -951},{UINT64_C(0x0000000005203002),  +323},{UINT64_C(0x0000000005a0ff12), +1316},
         {UINT64_C(0x00000009c0003001),  +118},{UINT64_C(0x00000009c0004e5d), +1860},{UINT64_C(0x00000009c000500b),  +442},{UINT64_C(0x00000009c0005341),  -923},
         {UINT64_C(0x00000009c0005b9a), -1023},{UINT64_C(0x00000009c0006b21),   -28},{UINT64_C(0x00000009c000767e),  +414},{UINT64_C(0x00000009c00076f4),   +79},
@@ -4550,25 +4550,25 @@ static int hcbudoux_impl_compute_score_zh_hant(uint32_t utf32_prev3, uint32_t ut
         {UINT64_C(0x00000013dbc056db),  -413},{UINT64_C(0x00000013dbc0ff0c), +1192},{UINT64_C(0x00000013dd005718), +1171},{UINT64_C(0x00000013dd007c4d),   -11},
         {UINT64_C(0x00000013dd0090e8),  +714},{UINT64_C(0x0000001fe2000025),  +184},{UINT64_C(0x0000001fe2002027),  +818},{UINT64_C(0x0000001fe200ff10),  -262},
         {UINT64_C(0x0000001fe22081f3),   +36},{UINT64_C(0x0000001fe220ff10),  +473},{UINT64_C(0x0000001fe220ff16),   +62},};
-  static hcbudoux_impl_item3 const tw1[] = {
+  static const hcbudoux_impl_item3 tw1[] = {
         {UINT64_C(0x01380009cba04e5d), -1376},{UINT64_C(0x0138240a68205206),  -156},{UINT64_C(0x013a300a68204e00),   -36},{UINT64_C(0x013a300a68204e5d),  +622},
         {UINT64_C(0x013f100ff0a065af),  +680},{UINT64_C(0x0145ac0a682056db),   -26},{UINT64_C(0x014d0409c00065e5),  +452},{UINT64_C(0x014d0c09d280767e),  +303},
         {UINT64_C(0x014d0c0adb60767e),   -42},{UINT64_C(0x014fc00e0c607701),  +136},{UINT64_C(0x01d9f809c0605341),   +60},{UINT64_C(0x01d9f809c1205341),  +224},
         {UINT64_C(0x01d9f809d2805341),  +373},{UINT64_C(0x01e4f81143008005),  +564},{UINT64_C(0x01fea40b24e05229),   +78},{UINT64_C(0x027ba009c5a0592e),  +349},
         {UINT64_C(0x03fc3009c5a0592e),   +57},{UINT64_C(0x03fc300a7e005317),   +89},{UINT64_C(0x03fc30120320662f), -1651},};
-  static hcbudoux_impl_item3 const tw2[] = {
+  static const hcbudoux_impl_item3 tw2[] = {
         {UINT64_C(0x014d0409c00065e5),  -467},{UINT64_C(0x014d0409c06065e5),  -329},{UINT64_C(0x014d0409cba065e5),  -387},{UINT64_C(0x014d0409d28065e5),  -314},
         {UINT64_C(0x014d040a2da065e5),  -221},{UINT64_C(0x014d040adb605e74),   -26},{UINT64_C(0x014d040adb6065e5),  -372},{UINT64_C(0x014fc009c5a05e02),  -705},
         {UINT64_C(0x014fc00a62e07e23), -1315},{UINT64_C(0x014fc00e0c607701), -1480},{UINT64_C(0x0167500a9c206703), -1992},{UINT64_C(0x017a98000540002a),  -298},
         {UINT64_C(0x0240c809c0006b65), -1637},};
-  static hcbudoux_impl_item3 const tw3[] = {
+  static const hcbudoux_impl_item3 tw3[] = {
         {UINT64_C(0x0138240a68204e00),  +219},{UINT64_C(0x0138ec1206406b65),  -557},{UINT64_C(0x014d040a40c0ff0c),   -31},{UINT64_C(0x0196c00a7e005e63), -2102},
         {UINT64_C(0x020fbc0d8220570b), -2555},{UINT64_C(0x0240c809c0006b65), -1123},};
-  static hcbudoux_impl_item3 const tw4[] = {
+  static const hcbudoux_impl_item3 tw4[] = {
         {UINT64_C(0x0145b00b87405c0f),  +582},{UINT64_C(0x015c2c0d82209ee8),  +721},{UINT64_C(0x015ca00a7e005317),  +110},{UINT64_C(0x0167500a9c206703), +1604},
         {UINT64_C(0x0196e412ec40ff0c),  +260},{UINT64_C(0x0197940a09e05357),  -682},{UINT64_C(0x0199080b234096f2), +2220},{UINT64_C(0x01b04409c7609ee8),  -710},
         {UINT64_C(0x01b0441206409ee8),  +729},{UINT64_C(0x01eb2c0d9aa09662),  +469},{UINT64_C(0x01fea40b24e05229),  +361},{UINT64_C(0x02598c12dd00ff11),   +17},};
-  static int const base =   -186;
+  static const int base =   -186;
   return hcbudoux_impl_compute_score_from_tables(
       base, uw1, (int)(sizeof(uw1) / sizeof(uw1[0])), uw2, (int)(sizeof(uw2) / sizeof(uw2[0])), uw3,
       (int)(sizeof(uw3) / sizeof(uw3[0])), uw4, (int)(sizeof(uw4) / sizeof(uw4[0])), uw5,
@@ -4585,12 +4585,12 @@ static int hcbudoux_impl_compute_score_zh_hant(uint32_t utf32_prev3, uint32_t ut
 // Score computation
 //
 static int hcbudoux_impl_compute_score(hcbudoux_ctx *ctx, hcbudoux_impl_lang lang) {
-  uint32_t const u0 = ctx->impl.utf32s[0];
-  uint32_t const u1 = ctx->impl.utf32s[1];
-  uint32_t const u2 = ctx->impl.utf32s[2];
-  uint32_t const u3 = ctx->impl.utf32s[3];
-  uint32_t const u4 = ctx->impl.utf32s[4];
-  uint32_t const u5 = ctx->impl.utf32s[5];
+  const uint32_t u0 = ctx->impl.utf32s[0];
+  const uint32_t u1 = ctx->impl.utf32s[1];
+  const uint32_t u2 = ctx->impl.utf32s[2];
+  const uint32_t u3 = ctx->impl.utf32s[3];
+  const uint32_t u4 = ctx->impl.utf32s[4];
+  const uint32_t u5 = ctx->impl.utf32s[5];
 
   switch (lang) {
     case hcbudoux_impl_lang_ja:
@@ -4631,15 +4631,15 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
   for (;;) {
     // Read a UTF-8 character
     uint32_t new_utf32_char = 0;
-    int const new_utf32_char_index = ctx->impl.curr_index;
+    const int new_utf32_char_index = ctx->impl.curr_index;
     int new_utf32_char_size_in_bytes = 0;
     {
-      int const rest = ctx->impl.utf8_str_size_in_bytes - new_utf32_char_index;
+      const int rest = ctx->impl.utf8_str_size_in_bytes - new_utf32_char_index;
 
-      uint8_t const c0 = (uint8_t)(rest >= 1 ? (ctx->impl.utf8_str)[new_utf32_char_index + 0] : 0);
-      uint8_t const c1 = (uint8_t)(rest >= 2 ? (ctx->impl.utf8_str)[new_utf32_char_index + 1] : 0);
-      uint8_t const c2 = (uint8_t)(rest >= 3 ? (ctx->impl.utf8_str)[new_utf32_char_index + 2] : 0);
-      uint8_t const c3 = (uint8_t)(rest >= 4 ? (ctx->impl.utf8_str)[new_utf32_char_index + 3] : 0);
+      const uint8_t c0 = (uint8_t)(rest >= 1 ? (ctx->impl.utf8_str)[new_utf32_char_index + 0] : 0);
+      const uint8_t c1 = (uint8_t)(rest >= 2 ? (ctx->impl.utf8_str)[new_utf32_char_index + 1] : 0);
+      const uint8_t c2 = (uint8_t)(rest >= 3 ? (ctx->impl.utf8_str)[new_utf32_char_index + 2] : 0);
+      const uint8_t c3 = (uint8_t)(rest >= 4 ? (ctx->impl.utf8_str)[new_utf32_char_index + 3] : 0);
 
       // https://en.wikipedia.org/wiki/UTF-8#Description
       //      byte1
@@ -4654,8 +4654,8 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
           //
           // |         |         |         |         |
           // |0000 0000|0000 0000|0000 0000|0yyy zzzz|    [0x0000,0x007f]
-          uint32_t const p0 = c0 & 0x7f;
-          uint32_t const code_point = p0;
+          const uint32_t p0 = c0 & 0x7f;
+          const uint32_t code_point = p0;
           new_utf32_char = code_point;
           new_utf32_char_size_in_bytes = 1;
         }
@@ -4666,9 +4666,9 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
           //
           // |         |         |         |         |
           // |0000 0000|0000 0000|0000 0xxx|yyyy zzzz|    [0x0080,0x07ff]
-          uint32_t const p0 = (c0 & 0x1f) << 6;
-          uint32_t const p1 = (c1 & 0x3f);
-          uint32_t const code_point = p0 | p1;
+          const uint32_t p0 = (c0 & 0x1f) << 6;
+          const uint32_t p1 = (c1 & 0x3f);
+          const uint32_t code_point = p0 | p1;
           new_utf32_char = code_point;
           new_utf32_char_size_in_bytes = 2;
         }
@@ -4679,10 +4679,10 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
           //
           // |         |         |         |         |
           // |0000 0000|0000 0000|wwww xxxx|yyyy zzzz|    [0x0800,0xffff]
-          uint32_t const p0 = (c0 & 0x0f) << 12;
-          uint32_t const p1 = (c1 & 0x3f) << 6;
-          uint32_t const p2 = (c2 & 0x3f);
-          uint32_t const code_point = p0 | p1 | p2;
+          const uint32_t p0 = (c0 & 0x0f) << 12;
+          const uint32_t p1 = (c1 & 0x3f) << 6;
+          const uint32_t p2 = (c2 & 0x3f);
+          const uint32_t code_point = p0 | p1 | p2;
           new_utf32_char = code_point;
           new_utf32_char_size_in_bytes = 3;
         }
@@ -4693,11 +4693,11 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
           //
           // |         |         |         |         |
           // |0000 0000|000u vvvv|wwww xxxx|yyyy zzzz|    [0x010000,0x10ffff]
-          uint32_t const p0 = (c0 & 0x07) << 18;
-          uint32_t const p1 = (c1 & 0x3f) << 12;
-          uint32_t const p2 = (c2 & 0x3f) << 6;
-          uint32_t const p3 = (c3 & 0x3f);
-          uint32_t const code_point = p0 | p1 | p2 | p3;
+          const uint32_t p0 = (c0 & 0x07) << 18;
+          const uint32_t p1 = (c1 & 0x3f) << 12;
+          const uint32_t p2 = (c2 & 0x3f) << 6;
+          const uint32_t p3 = (c3 & 0x3f);
+          const uint32_t code_point = p0 | p1 | p2 | p3;
           new_utf32_char = code_point;
           new_utf32_char_size_in_bytes = 4;
         }
@@ -4727,9 +4727,9 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
     ctx->impl.curr_index += new_utf32_char_size_in_bytes;
 
     {
-      int const start = ctx->impl.last_index;
-      int const end = ctx->impl.indices[3];
-      int const length = end - start;
+      const int start = ctx->impl.last_index;
+      const int end = ctx->impl.indices[3];
+      const int length = end - start;
 
       // indices[3] (end) is the byte offset of the current character (utf32s[3]).
       // -1 means the slot has not been filled yet; an offset past the end means EOF padding.
@@ -4739,7 +4739,7 @@ static bool hcbudoux_impl_getnext(hcbudoux_ctx *ctx, hcbudoux_span *span, hcbudo
         // Queue contains valid input.
 
         // Evaluate queue
-        int const score = hcbudoux_impl_compute_score(ctx, lang);
+        const int score = hcbudoux_impl_compute_score(ctx, lang);
 
         // If score > 0, it means we can put &nbsp; between character at
         // utf32s[2] and utf32s[3]. Also, since the first valid character may

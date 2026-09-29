@@ -23,8 +23,8 @@ void init(void) {}
 #endif
 
 int main(int argc, const char **argv) {
-  static char const utf8Str[] = u8"次の決闘がまもなく始まる！";
-  int const utf8Strlen = (int)strlen(utf8Str);
+  static const char utf8Str[] = u8"次の決闘がまもなく始まる！";
+  const int utf8Strlen = (int)strlen(utf8Str);
 
   (void)argc;
   (void)argv;

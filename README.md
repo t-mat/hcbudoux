@@ -44,8 +44,8 @@ void init(void) {}
 #endif
 
 int main(int argc, const char **argv) {
-    static char const utf8_str[]  = u8"次の決闘がまもなく始まる！";
-    int const         utf8_strlen = (int)strlen(utf8_str);
+    static const char utf8_str[]  = u8"次の決闘がまもなく始まる！";
+    const int         utf8_strlen = (int)strlen(utf8_str);
 
     static_assert(sizeof(utf8_str) == 40, "Basic UTF-8 test");
     init();

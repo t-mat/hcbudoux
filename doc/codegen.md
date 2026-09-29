@@ -37,7 +37,7 @@ For example, `third_party/budoux/budoux/models/ja.json` is parsed and converted 
 Implementation details
 ----------------------
 
-- Using snake_case, east const, `_impl_` indicates actual (private) implementation.
+- Using snake_case, west const (`const T *p`, as in the C standard library), `_impl_` indicates actual (private) implementation.
 - Utilize UTF-32 to reduce complexity.
   - `hcbudoux_ctx::utf32s[]` and `indices[]` represent the following relative position characters:
     ```

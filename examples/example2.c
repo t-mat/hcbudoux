@@ -29,12 +29,12 @@ int computeStringWidth(const void *utf8_str, int utf8_str_size_in_bytes) {
     uint32_t new_utf32_char = 0;
     int new_utf32_char_size_in_bytes = 0;
     {
-      int const rest = utf8_str_size_in_bytes - index;
+      const int rest = utf8_str_size_in_bytes - index;
 
-      uint8_t const c0 = (uint8_t)(rest >= 1 ? p[index + 0] : 0);
-      uint8_t const c1 = (uint8_t)(rest >= 2 ? p[index + 1] : 0);
-      uint8_t const c2 = (uint8_t)(rest >= 3 ? p[index + 2] : 0);
-      uint8_t const c3 = (uint8_t)(rest >= 4 ? p[index + 3] : 0);
+      const uint8_t c0 = (uint8_t)(rest >= 1 ? p[index + 0] : 0);
+      const uint8_t c1 = (uint8_t)(rest >= 2 ? p[index + 1] : 0);
+      const uint8_t c2 = (uint8_t)(rest >= 3 ? p[index + 2] : 0);
+      const uint8_t c3 = (uint8_t)(rest >= 4 ? p[index + 3] : 0);
 
       // https://en.wikipedia.org/wiki/UTF-8#Description
       //      byte1
@@ -49,8 +49,8 @@ int computeStringWidth(const void *utf8_str, int utf8_str_size_in_bytes) {
           //
           // |         |         |         |         |
           // |0000 0000|0000 0000|0000 0000|0yyy zzzz|    [0x0000,0x007f]
-          uint32_t const p0 = c0 & 0x7f;
-          uint32_t const code_point = p0;
+          const uint32_t p0 = c0 & 0x7f;
+          const uint32_t code_point = p0;
           new_utf32_char = code_point;
           new_utf32_char_size_in_bytes = 1;
         }
@@ -61,9 +61,9 @@ int computeStringWidth(const void *utf8_str, int utf8_str_size_in_bytes) {
           //
           // |         |         |         |         |
           // |0000 0000|0000 0000|0000 0xxx|yyyy zzzz|    [0x0080,0x07ff]
-          uint32_t const p0 = (c0 & 0x1f) << 6;
-          uint32_t const p1 = (c1 & 0x3f);
-          uint32_t const code_point = p0 | p1;
+          const uint32_t p0 = (c0 & 0x1f) << 6;
+          const uint32_t p1 = (c1 & 0x3f);
+          const uint32_t code_point = p0 | p1;
           new_utf32_char = code_point;
           new_utf32_char_size_in_bytes = 2;
         }
@@ -74,10 +74,10 @@ int computeStringWidth(const void *utf8_str, int utf8_str_size_in_bytes) {
           //
           // |         |         |         |         |
           // |0000 0000|0000 0000|wwww xxxx|yyyy zzzz|    [0x0800,0xffff]
-          uint32_t const p0 = (c0 & 0x0f) << 12;
-          uint32_t const p1 = (c1 & 0x3f) << 6;
-          uint32_t const p2 = (c2 & 0x3f);
-          uint32_t const code_point = p0 | p1 | p2;
+          const uint32_t p0 = (c0 & 0x0f) << 12;
+          const uint32_t p1 = (c1 & 0x3f) << 6;
+          const uint32_t p2 = (c2 & 0x3f);
+          const uint32_t code_point = p0 | p1 | p2;
           new_utf32_char = code_point;
           new_utf32_char_size_in_bytes = 3;
         }
@@ -88,11 +88,11 @@ int computeStringWidth(const void *utf8_str, int utf8_str_size_in_bytes) {
           //
           // |         |         |         |         |
           // |0000 0000|000u vvvv|wwww xxxx|yyyy zzzz|    [0x010000,0x10ffff]
-          uint32_t const p0 = (c0 & 0x07) << 18;
-          uint32_t const p1 = (c1 & 0x3f) << 12;
-          uint32_t const p2 = (c2 & 0x3f) << 6;
-          uint32_t const p3 = (c3 & 0x3f);
-          uint32_t const code_point = p0 | p1 | p2 | p3;
+          const uint32_t p0 = (c0 & 0x07) << 18;
+          const uint32_t p1 = (c1 & 0x3f) << 12;
+          const uint32_t p2 = (c2 & 0x3f) << 6;
+          const uint32_t p3 = (c3 & 0x3f);
+          const uint32_t code_point = p0 | p1 | p2 | p3;
           new_utf32_char = code_point;
           new_utf32_char_size_in_bytes = 4;
         }
@@ -105,7 +105,7 @@ int computeStringWidth(const void *utf8_str, int utf8_str_size_in_bytes) {
 
       index += new_utf32_char_size_in_bytes;
 
-      int const eaw = east_asian_width(new_utf32_char);
+      const int eaw = east_asian_width(new_utf32_char);
 
       if (eaw <= east_asian_width_N) {
         half_width_count += 1;  // H, Na, N
@@ -118,8 +118,8 @@ int computeStringWidth(const void *utf8_str, int utf8_str_size_in_bytes) {
 }
 
 int main(int argc, const char **argv) {
-  static char const utf8Str[] = u8"次の決闘がまもなく始まる！";
-  int const utf8Strlen = (int)strlen(utf8Str);
+  static const char utf8Str[] = u8"次の決闘がまもなく始まる！";
+  const int utf8Strlen = (int)strlen(utf8Str);
 
   (void)argc;
   (void)argv;
@@ -142,8 +142,8 @@ int main(int argc, const char **argv) {
     printf(" ");
     while (hcbudoux_getnext_ja(&ctx, &span)) {
       const char *p = utf8Str + span.offset;
-      int const n = span.length;
-      int const w = computeStringWidth(p, n);
+      const int n = span.length;
+      const int w = computeStringWidth(p, n);
       if (x != 0 && x + w > width) {
         printf("\n ");
         x = 0;

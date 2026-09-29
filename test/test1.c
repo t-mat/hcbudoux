@@ -20,7 +20,7 @@ void init(void) {}
 #endif
 
 static bool test(hcbudoux_impl_lang lang, const void *utf8String, const void *utf8ExpectedResults) {
-  int32_t const utf8StringSizeInBytes = (int32_t)strlen((const char *)utf8String);
+  const int32_t utf8StringSizeInBytes = (int32_t)strlen((const char *)utf8String);
   const char *pExp = (const char *)utf8ExpectedResults;
 
   bool total = true;
@@ -35,9 +35,9 @@ static bool test(hcbudoux_impl_lang lang, const void *utf8String, const void *ut
     {
       bool result = true;
       const char *const expectedStr = pExp;
-      int const expectedLen = (int)strlen(expectedStr);
+      const int expectedLen = (int)strlen(expectedStr);
       const char *const actualStr = ((const char *)utf8String) + span.offset;
-      int const actualLen = span.length;
+      const int actualLen = span.length;
       if (expectedLen == 0) {
         result = false;
       }
@@ -342,7 +342,7 @@ static bool test_edge_cases(void) {
 
   // 4-byte UTF-8 character (emoji)
   {
-    static char const str[] = u8"笑顔\xF0\x9F\x98\x80です";  // U+1F600
+    static const char str[] = u8"笑顔\xF0\x9F\x98\x80です";  // U+1F600
     hcbudoux_ctx ctx;
     hcbudoux_span span;
     int32_t total_len = 0;
@@ -377,7 +377,7 @@ static bool test_public_api(void) {
   {
     hcbudoux_ctx ctx;
     hcbudoux_span span;
-    static char const str[] = u8"次の決闘がまもなく始まる！";
+    static const char str[] = u8"次の決闘がまもなく始まる！";
     result &= test(hcbudoux_impl_lang_ja, str,
                    u8"次の\0"
                    u8"決闘が\0"
@@ -395,7 +395,7 @@ static bool test_public_api(void) {
   {
     hcbudoux_ctx ctx;
     hcbudoux_span span;
-    static char const str[] = u8"我们的使命";
+    static const char str[] = u8"我们的使命";
     hcbudoux_init(&ctx, str, (int32_t)strlen(str));
     bool got = hcbudoux_getnext_zh_hans(&ctx, &span);
     bool ok = got && span.offset == 0 && span.length > 0;
@@ -413,7 +413,7 @@ static bool test_public_api(void) {
   {
     hcbudoux_ctx ctx;
     hcbudoux_span span;
-    static char const str[] = u8"我們的使命";
+    static const char str[] = u8"我們的使命";
     int32_t total_len = 0;
     hcbudoux_init(&ctx, str, (int32_t)strlen(str));
     while (hcbudoux_getnext_zh_hant(&ctx, &span)) {
@@ -428,7 +428,7 @@ static bool test_public_api(void) {
   {
     hcbudoux_ctx ctx;
     hcbudoux_span span;
-    static char const str[] = u8"ภารกิจของเรา";
+    static const char str[] = u8"ภารกิจของเรา";
     int32_t total_len = 0;
     hcbudoux_init(&ctx, str, (int32_t)strlen(str));
     while (hcbudoux_getnext_th(&ctx, &span)) {
@@ -443,7 +443,7 @@ static bool test_public_api(void) {
   {
     hcbudoux_ctx ctx;
     hcbudoux_span span;
-    static char const str[] = u8"次の決闘がまもなく始まる！";
+    static const char str[] = u8"次の決闘がまもなく始まる！";
     int32_t total_len = 0;
     hcbudoux_init(&ctx, str, (int32_t)strlen(str));
     while (hcbudoux_getnext_ja_knbc(&ctx, &span)) {
