@@ -4,3 +4,6 @@ ColumnLimit: 120
 QualifierAlignment: Left
 DerivePointerAlignment: false
 PointerAlignment: Right
+# Portability macros that sit where an attribute would (e.g. `HCBUDOUX_NODISCARD bool f(void);`).
+AttributeMacros:
+  - HCBUDOUX_NODISCARD

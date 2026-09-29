@@ -10,7 +10,22 @@
 #include <string>
 #include <vector>
 
-std::string readFile(const std::string &filename) {
+// [[nodiscard]] is C++17.  Expands to nothing on older standards (-std=c++11 / /std:c++14).
+// __has_cpp_attribute alone is not enough: clang reports the attribute as available in C++14
+// mode and then warns under -Wpedantic, so the language version is checked as well
+// (MSVC reports it in _MSVC_LANG unless /Zc:__cplusplus is given).
+#if (__cplusplus >= 201703L) || (defined(_MSVC_LANG) && (_MSVC_LANG >= 201703L))
+#if defined(__has_cpp_attribute)
+#if __has_cpp_attribute(nodiscard)
+#define HCBUDOUX_NODISCARD [[nodiscard]]
+#endif
+#endif
+#endif
+#if !defined(HCBUDOUX_NODISCARD)
+#define HCBUDOUX_NODISCARD
+#endif
+
+HCBUDOUX_NODISCARD std::string readFile(const std::string &filename) {
   std::string v;
   if (FILE *fp = fopen(filename.c_str(), "rb")) {
     for (int c; (c = fgetc(fp)) != EOF;) {
@@ -24,7 +39,7 @@ std::string readFile(const std::string &filename) {
 namespace TextTemplate {
 using Dictionary = std::map<std::string, std::string>;
 
-std::string replaceAll(const std::string &src, const Dictionary &dictionary) {
+HCBUDOUX_NODISCARD std::string replaceAll(const std::string &src, const Dictionary &dictionary) {
   std::string tempText = src;
   for (const auto &kv : dictionary) {
     const std::string &replaceWord = kv.first;
@@ -40,7 +55,7 @@ std::string replaceAll(const std::string &src, const Dictionary &dictionary) {
 
 using Model = std::map<std::string, std::map<uint64_t, int>>;  // [TableName][encodedString][integer]
 
-Model loadModel(const std::string &json) {
+HCBUDOUX_NODISCARD Model loadModel(const std::string &json) {
   // Encode UTF-8 string
   const auto encodeKey = [](const std::string &utf8str) -> uint64_t {
     static const auto utf8strToUtf32vec = [](const std::string &utf8s) -> std::vector<uint32_t> {
@@ -165,7 +180,7 @@ Model loadModel(const std::string &json) {
   return model;
 }
 
-TextTemplate::Dictionary generateTemplateDictionary() {
+HCBUDOUX_NODISCARD TextTemplate::Dictionary generateTemplateDictionary() {
   struct Language {
     std::string jsonFilename;
     std::string symbol;
@@ -250,7 +265,7 @@ TextTemplate::Dictionary generateTemplateDictionary() {
   return templateMap;
 }
 
-bool generate() {
+HCBUDOUX_NODISCARD bool generate() {
   const std::string templateFilename = "./hcbudoux.template.h";
   const std::string outFilename = "../include/hcbudoux.h";
   const TextTemplate::Dictionary templateMap = generateTemplateDictionary();

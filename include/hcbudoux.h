@@ -89,6 +89,21 @@
 #include <stdint.h>   // uint8_t, uint32_t, uint64_t
 #endif
 
+// [[nodiscard]] is C++17.  Expands to nothing in C and in older C++.
+// The language version is checked in addition to __has_cpp_attribute because clang reports the
+// attribute as available in C++11/14 mode and then warns under -Wpedantic.  MSVC reports the
+// version in _MSVC_LANG unless /Zc:__cplusplus is given.
+#if defined(__cplusplus) && ((__cplusplus >= 201703L) || (defined(_MSVC_LANG) && (_MSVC_LANG >= 201703L)))
+#if defined(__has_cpp_attribute)
+#if __has_cpp_attribute(nodiscard)
+#define HCBUDOUX_NODISCARD [[nodiscard]]
+#endif
+#endif
+#endif
+#if !defined(HCBUDOUX_NODISCARD)
+#define HCBUDOUX_NODISCARD
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -131,11 +146,11 @@ void hcbudoux_init(hcbudoux_ctx *ctx, const void *utf8_str, int32_t utf8_str_siz
 //
 // The string view is not terminated with `\0'.
 // Use span->length to terminate the string view properly.
-bool hcbudoux_getnext_ja(hcbudoux_ctx *ctx, hcbudoux_span *span);
-bool hcbudoux_getnext_ja_knbc(hcbudoux_ctx *ctx, hcbudoux_span *span);
-bool hcbudoux_getnext_th(hcbudoux_ctx *ctx, hcbudoux_span *span);
-bool hcbudoux_getnext_zh_hans(hcbudoux_ctx *ctx, hcbudoux_span *span);
-bool hcbudoux_getnext_zh_hant(hcbudoux_ctx *ctx, hcbudoux_span *span);
+HCBUDOUX_NODISCARD bool hcbudoux_getnext_ja(hcbudoux_ctx *ctx, hcbudoux_span *span);
+HCBUDOUX_NODISCARD bool hcbudoux_getnext_ja_knbc(hcbudoux_ctx *ctx, hcbudoux_span *span);
+HCBUDOUX_NODISCARD bool hcbudoux_getnext_th(hcbudoux_ctx *ctx, hcbudoux_span *span);
+HCBUDOUX_NODISCARD bool hcbudoux_getnext_zh_hans(hcbudoux_ctx *ctx, hcbudoux_span *span);
+HCBUDOUX_NODISCARD bool hcbudoux_getnext_zh_hant(hcbudoux_ctx *ctx, hcbudoux_span *span);
 
 //
 // ^^^^^^^^^^^^^^^^^^^^^^

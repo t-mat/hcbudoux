@@ -116,6 +116,8 @@ struct hcbudoux_span { // String view
   int32_t length;      // Public member: length in bytes.
 };
 
+// HCBUDOUX_NODISCARD : `[[nodiscard]]` in C++17 or later, nothing otherwise.
+
 // Initialize a parser context with a UTF-8 string.
 // utf8_str is encoded in UTF-8.  utf8_str must outlive hcbudoux_ctx.
 // We don't need to "close" hcbudoux_ctx since it doesn't allocate dynamic resources.
@@ -124,11 +126,11 @@ void hcbudoux_init (hcbudoux_ctx *ctx, const void *utf8_str, int32_t utf8_str_si
 // Get the next string view of the specific language.
 // Returns false when the parser reaches the end of utf8_str.
 // When it returns true, span contains a valid offset and length of the string view.
-bool hcbudoux_getnext_ja      (hcbudoux_ctx *ctx, hcbudoux_span* span);
-bool hcbudoux_getnext_ja_knbc (hcbudoux_ctx *ctx, hcbudoux_span* span);
-bool hcbudoux_getnext_th      (hcbudoux_ctx *ctx, hcbudoux_span* span);
-bool hcbudoux_getnext_zh_hans (hcbudoux_ctx *ctx, hcbudoux_span* span);
-bool hcbudoux_getnext_zh_hant (hcbudoux_ctx *ctx, hcbudoux_span* span);
+HCBUDOUX_NODISCARD bool hcbudoux_getnext_ja      (hcbudoux_ctx *ctx, hcbudoux_span *span);
+HCBUDOUX_NODISCARD bool hcbudoux_getnext_ja_knbc (hcbudoux_ctx *ctx, hcbudoux_span *span);
+HCBUDOUX_NODISCARD bool hcbudoux_getnext_th      (hcbudoux_ctx *ctx, hcbudoux_span *span);
+HCBUDOUX_NODISCARD bool hcbudoux_getnext_zh_hans (hcbudoux_ctx *ctx, hcbudoux_span *span);
+HCBUDOUX_NODISCARD bool hcbudoux_getnext_zh_hant (hcbudoux_ctx *ctx, hcbudoux_span *span);
 ```
 
 
