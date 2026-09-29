@@ -4,8 +4,7 @@
 # The check set is listed explicitly because LLVM 23 enables only clang-diagnostic-* by default
 # and then exits with "no checks enabled".
 #
-# clang-analyzer-security.ArrayBound is disabled: the analyzer models strlen() on a string literal
-# as the literal's full length, counting embedded NULs as characters (verified with LLVM 23:
-# strlen("ab\0cd") is treated as 5).  That makes it report out-of-bound reads for the NUL-separated
-# expected-result lists in test/test1.c, which are correct.
-Checks: 'clang-diagnostic-*,clang-analyzer-*,-clang-analyzer-security.ArrayBound'
+# clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling is disabled: in C11 mode it
+# flags every memcpy/snprintf and recommends the Annex K *_s functions, which are optional and not
+# provided by glibc, so the advice cannot be followed portably.
+Checks: 'clang-diagnostic-*,clang-analyzer-*,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling'

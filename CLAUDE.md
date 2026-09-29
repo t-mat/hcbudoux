@@ -87,7 +87,7 @@ If none are defined, all models are included. `HCBUDOUX_DONT_INCLUDE_STD` skips 
 ### Tests
 
 - `test/test1.c` defines `HCBUDOUX_IMPLEMENTATION` and calls the **private** `hcbudoux_impl_getnext` with `hcbudoux_impl_lang_*`, so renaming internals breaks the tests.
-- Expected output for a case is one string literal with segments separated by `\0` and terminated by an extra `\0` (e.g. `u8"次の\0" u8"決闘が\0"`). Add cases to `testCases[]` in `test_all()`.
+- An expected result is one string with the segments joined by `▁` (U+2581), e.g. `u8"次の▁決闘が▁まもなく▁始まる！"`. `test()` joins the spans it gets from the parser with the same separator and compares the whole string once; a case whose input contains the separator fails. Add cases to `testCases[]` in `test_all()`.
 - `test/test2.cpp` is just `#include "./test1.c"` compiled as C++ (`-std=c++11`, MSVC `/std:c++14`). Anything added to `test1.c` must also be valid C++ (no implicit `void*` conversions, etc.).
 - Some Japanese expectations (marked "Test for bad result") are model-specific and change when the BudouX model changes.
 
@@ -120,7 +120,7 @@ C++ sources (`codegen.cpp`, `test2.cpp`) use `-std=c++11` with the same set minu
 
 Google C style, 120-character column limit (see `.clang-format`). Qualifiers are west const (`const T *p`, `static const T x[]`), enforced by `QualifierAlignment: Left`; pointers are right-aligned (`T *p`). `make clang-format` formats the template, codegen, tests, and examples only, never `include/hcbudoux.h` or `examples/east_asian_width.h`. The test table in `test1.c` is wrapped in `// clang-format off`.
 
-`.clang-tidy` at the root lists the check set explicitly (LLVM 23's default is empty and errors out) and disables `clang-analyzer-security.ArrayBound`, which models `strlen()` on a literal as the literal's full length and therefore misreports the NUL-separated expected-result lists in `test1.c`. Keep analyzer exclusions there, not as `NOLINT` comments in code.
+`.clang-tidy` at the root lists the check set explicitly (LLVM 23's default is empty and errors out) and disables `clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling`, which in C11 mode flags every `memcpy`/`snprintf` in favour of the optional Annex K `*_s` functions that glibc does not provide. Keep analyzer exclusions there, not as `NOLINT` comments in code. Note that the analyzer counts embedded NULs in a string literal as characters when it models `strlen()` (LLVM 23 treats `strlen("ab\0cd")` as 5), so NUL-separated lists in test data would trigger `clang-analyzer-security.ArrayBound`.
 
 ## Repository Gotchas
 
