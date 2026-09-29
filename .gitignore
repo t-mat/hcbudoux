@@ -4,6 +4,7 @@
 !/*.bat
 
 !/.clang-format
+!/.clang-tidy
 !/.gitattributes
 !/.gitignore
 !/LICENSE

@@ -118,6 +118,8 @@ C++ sources (`codegen.cpp`, `test2.cpp`) use `-std=c++11` with the same set minu
 
 Google C style, 120-character column limit (see `.clang-format`). Qualifiers are west const (`const T *p`, `static const T x[]`), enforced by `QualifierAlignment: Left`; pointers are right-aligned (`T *p`). `make clang-format` formats the template, codegen, tests, and examples only, never `include/hcbudoux.h` or `examples/east_asian_width.h`. The test table in `test1.c` is wrapped in `// clang-format off`.
 
+`.clang-tidy` at the root lists the check set explicitly (LLVM 23's default is empty and errors out) and disables `clang-analyzer-security.ArrayBound`, which models `strlen()` on a literal as the literal's full length and therefore misreports the NUL-separated expected-result lists in `test1.c`. Keep analyzer exclusions there, not as `NOLINT` comments in code.
+
 ## Repository Gotchas
 
 - `.gitignore` files are **allow-lists** (`/*` followed by `!` entries). A new top-level directory, or a file inside `codegen/`, `test/`, or `examples/` with an extension other than `.c/.cpp/.h/.md/.sh/.bat` (plus `Makefile`), is silently ignored until the corresponding `.gitignore` is updated.
