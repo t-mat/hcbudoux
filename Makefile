@@ -1,5 +1,6 @@
 .DEFAULT_GOAL := run
 .PHONY: all clean run
+.PHONY: all-clang
 .PHONY: clang-format clang-tidy
 .PHONY: codegen examples test
 
@@ -12,6 +13,9 @@ clean:
 	$(MAKE) -C test     clean
 
 run: test examples
+
+all-clang:
+	$(MAKE) all CC=clang CXX=clang++
 
 clang-format:
 	$(MAKE) -C codegen  clang-format

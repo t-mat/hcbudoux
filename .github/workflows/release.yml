@@ -1,0 +1,24 @@
+name: release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Check that the tag matches the version in include/hcbudoux.h
+        run: |
+          v=$(sh scripts/version.sh)
+          test "${GITHUB_REF_NAME}" = "v${v}" || { echo "tag ${GITHUB_REF_NAME} != v${v}"; exit 1; }
+      - name: make all
+        run: make all
+      - name: Create GitHub Release with include/hcbudoux.h
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${GITHUB_REF_NAME}" include/hcbudoux.h --title "${GITHUB_REF_NAME}" --generate-notes

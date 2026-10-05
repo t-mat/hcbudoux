@@ -1,6 +1,8 @@
 hcbudoux
 ========
 
+[![test](https://github.com/t-mat/hcbudoux/actions/workflows/test.yml/badge.svg)](https://github.com/t-mat/hcbudoux/actions/workflows/test.yml)
+
 A single-header C11 implementation of [BudouX](https://github.com/google/budoux) line break library for Chinese, Japanese, and Thai languages.
 
 
@@ -13,7 +15,7 @@ Prerequisites
 Installation and usage
 ----------------------
 
-- Copy `include/hcbudoux.h` to your project.
+- Copy `include/hcbudoux.h` to your project. Each [release](https://github.com/t-mat/hcbudoux/releases) also has it as an asset.
 - Follow the stb-style header-only library convention. Therefore, you should do this:
   ```C
   #define HCBUDOUX_IMPLEMENTATION
@@ -175,6 +177,7 @@ Shortcut for development tasks
 | ---                                   | ---                   | ---                                   |
 | Run test and examples                 | `make`                | `.\run.bat`                           |
 | Clean, codegen, test and examples     | `make all`            | `.\run.bat all`                       |
+| Same as `all`, built with clang       | `make all-clang`      | (none)                                |
 | Run codegen                           | `make codegen`        | `.\run.bat codegen`                   |
 | Run test                              | `make test`           | `.\run.bat test`                      |
 | Run examples                          | `make examples`       | `.\run.bat examples`                  |
@@ -183,6 +186,17 @@ Shortcut for development tasks
 | Remove build outputs                  | `make clean`          | `.\run.bat clean`                     |
 
 `run.bat` accepts several targets and runs them in order, e.g. `.\run.bat codegen test`.
+
+| Task                                  | Linux / WSL                   | Windows                               |
+| ---                                   | ---                           | ---                                   |
+| Install build tools, Docker and act   | `sh scripts/wsl-setup.sh`     | `wsl -e sh scripts/wsl-setup.sh`      |
+| Run CI locally with [act]             | `sh scripts/act.sh`           | `wsl -e sh scripts/act.sh`            |
+| Tag `v<version>` and release          | `sh scripts/release.sh`       | `wsl -e sh scripts/release.sh`        |
+
+[act]: https://github.com/nektos/act
+
+CI (`.github/workflows/test.yml`) runs `make all` and `make all-clang` on Linux and fails if the committed `include/hcbudoux.h` is not up to date.
+`scripts/release.sh` tags `main` with the version in `include/hcbudoux.h`; `.github/workflows/release.yml` then creates the GitHub Release.
 
 
 Third party libraries
@@ -227,3 +241,11 @@ To the extent possible under law, the person who associated CC0-1.0 with "hcbudo
 has waived all copyright and related or neighboring rights to "hcbudoux".
 See https://creativecommons.org/publicdomain/zero/1.0/ for CC0-1.0 legalcode.
 ```
+
+Third party parts keep their own licenses:
+
+| Part                                              | Source                                            | License                                       |
+| ---                                               | ---                                               | ---                                           |
+| Model tables in `include/hcbudoux.h`              | [BudouX](https://github.com/google/budoux) models | Apache-2.0 (`third_party/budoux/LICENSE`)     |
+| `examples/east_asian_width.h`                     | Unicode `EastAsianWidth.txt`                      | Unicode-3.0 (notice in the file)              |
+| `third_party/json.h/json.h` (codegen only)        | [json.h](https://github.com/sheredom/json.h)      | Unlicense (`third_party/json.h/LICENSE`)      |

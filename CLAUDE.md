@@ -13,6 +13,7 @@ Linux/macOS (make + gcc/clang):
 ```bash
 make            # default target `run`: build and run tests + examples (does NOT regenerate the header)
 make all        # clean + codegen + tests + examples
+make all-clang  # `make all` with CC=clang CXX=clang++
 make codegen    # regenerate include/hcbudoux.h from codegen/ templates + BudouX models
 make test       # build and run test/test1 (C) and test/test2 (C++)
 make examples   # build and run examples/example1, example2
@@ -35,7 +36,19 @@ Windows (MSVC, no make):
 .\run.bat codegen test    # several targets run in order, stopping at the first failure
 ```
 
-`run.bat` takes the same target names as the Makefile. `codegen`, `test`, and `examples` delegate to `codegen\run.bat`, `test\run.bat`, and `examples\run.bat`, which remain usable on their own (like `make -C <dir>`). The `.bat` scripts locate Visual Studio via vswhere (`scripts/cl-exe.bat`, `scripts/intro.bat`), compile with `cl.exe /nologo /utf-8 /O2`, and write `.obj` files to `_tmp/`. They pass `/`-style switches to `cl.exe`, so run them from cmd.exe or PowerShell, not from a Cygwin/MSYS bash. The `clang-format` and `clang-tidy` targets use a project-local LLVM that `scripts/_llvm-ensure.bat` downloads into `.llvm/` (ignored) on first use.
+`run.bat` takes the same target names as the Makefile, except `all-clang`. `codegen`, `test`, and `examples` delegate to `codegen\run.bat`, `test\run.bat`, and `examples\run.bat`, which remain usable on their own (like `make -C <dir>`). The `.bat` scripts locate Visual Studio via vswhere (`scripts/cl-exe.bat`, `scripts/intro.bat`), compile with `cl.exe /nologo /utf-8 /O2`, and write `.obj` files to `_tmp/`. They pass `/`-style switches to `cl.exe`, so run them from cmd.exe or PowerShell, not from a Cygwin/MSYS bash. The `clang-format` and `clang-tidy` targets use a project-local LLVM that `scripts/_llvm-ensure.bat` downloads into `.llvm/` (ignored) on first use.
+
+### CI and WSL
+
+`.github/workflows/test.yml` runs `make all` and `make all-clang` on `ubuntu-latest`, then fails if `git diff` shows that the committed `include/hcbudoux.h` differs from the regenerated one. It does not use `run.bat`.
+
+On Windows, the Makefiles run in WSL (`wsl -e make all`). Use `wsl -e`, not `wsl -- bash -lc '...'`: the latter goes through WSL's default shell, which expands `$?` and similar before bash sees them. `scripts/wsl-setup.sh` installs the build tools plus Docker and act (needs sudo); `scripts/act.sh` runs the workflow locally with act. act's image only approximates GitHub's runner.
+
+Releases: the version lives in the `hcbudoux_version_*` enum in `codegen/hcbudoux.template.h` (`scripts/version.sh` prints it). `scripts/release.sh` tags a clean `main` that matches `origin/main` as `v<version>` and pushes the tag; `.github/workflows/release.yml` checks the tag against the header, runs `make all`, and creates the GitHub Release with `include/hcbudoux.h` attached.
+
+## Licensing
+
+The project is CC0-1.0, but the model tables in `include/hcbudoux.h` come from BudouX (Apache-2.0) and `examples/east_asian_width.h` from the Unicode Character Database (Unicode-3.0, notice embedded in the file). Keep both notices when editing those files; the header's notice lives in the template.
 
 ### Running a single test binary
 
