@@ -21,7 +21,7 @@
 // -------
 //
 // gcc:  gcc -std=c11 -I include example.c
-// MSVC: cl.exe /utf-8 /nologo -I include example1.c
+// MSVC: cl.exe /utf-8 /nologo -I include example.c
 //
 //     ```C
 //     // example.c
@@ -74,12 +74,16 @@
 // License
 // -------
 //
-// SPDX-License-Identifier: CC0-1.0
+// SPDX-License-Identifier: CC0-1.0 AND Apache-2.0
 //
 // "hcbudoux.h" by Takayuki Matsuoka.
 // To the extent possible under law, the person who associated CC0-1.0 with "hcbudoux.h"
 // has waived all copyright and related or neighboring rights to "hcbudoux.h".
 // See https://creativecommons.org/publicdomain/zero/1.0/ for CC0-1.0 legalcode.
+//
+// The model tables ("BudouX Models" section) are generated from the models of BudouX
+// (https://github.com/google/budoux), licensed under the Apache License, Version 2.0.
+// See https://www.apache.org/licenses/LICENSE-2.0 for the license text.
 
 #ifndef HCBUDOUX_H_INCLUDED
 #define HCBUDOUX_H_INCLUDED 1
