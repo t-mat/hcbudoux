@@ -118,7 +118,7 @@ extern "C" {
 //
 enum {
   hcbudoux_version_major = 0,
-  hcbudoux_version_minor = 1,
+  hcbudoux_version_minor = 10,
   hcbudoux_version_patch = 0,
 };
 
