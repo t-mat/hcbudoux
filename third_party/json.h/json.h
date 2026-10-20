@@ -405,6 +405,9 @@ enum json_parse_error_e {
      overflow, the library only supports recursion up to JSON_MAX_RECURSION */
   json_parse_error_recursion,
 
+  /* a C-style block comment was opened but never closed. */
+  json_parse_error_unterminated_comment,
+
   /* catch-all error for everything else that exploded (real bad chi!). */
   json_parse_error_unknown
 };
@@ -639,6 +642,10 @@ int json_skip_c_style_comments(struct json_parse_state_s *state) {
       /* we reached the end of the JSON file! */
       return 1;
     } else if ('*' == state->src[state->offset + 1]) {
+      const size_t start = state->offset;
+      const size_t line_no = state->line_no;
+      const size_t line_offset = state->line_offset;
+
       /* we had a comment in the C-style long form */
 
       /* skip '/' */
@@ -663,8 +670,12 @@ int json_skip_c_style_comments(struct json_parse_state_s *state) {
         state->offset++;
       }
 
-      /* comment wasn't ended correctly which is a failure */
-      return 1;
+      /* comment wasn't ended correctly, report it at the '/' */
+      state->error = json_parse_error_unterminated_comment;
+      state->offset = start;
+      state->line_no = line_no;
+      state->line_offset = line_offset;
+      return 0;
     }
   }
 
@@ -699,6 +710,10 @@ int json_skip_all_skippables(struct json_parse_state_s *state) {
       }
 
       did_consume |= json_skip_c_style_comments(state);
+
+      if (json_parse_error_unterminated_comment == state->error) {
+        return 1;
+      }
     } while (0 != did_consume);
   } else {
     do {
@@ -759,11 +774,8 @@ int json_get_string_size(struct json_parse_state_s *state, size_t is_key) {
     /* add space for the character. */
     data_size++;
 
-    switch (src[offset]) {
-    default:
-      break;
-    case '\0':
-    case '\t':
+    if ((unsigned char)src[offset] < 0x20 && src[offset] != '\r' &&
+        src[offset] != '\n') {
       state->error = json_parse_error_invalid_string;
       state->offset = offset;
       return 1;
@@ -793,6 +805,15 @@ int json_get_string_size(struct json_parse_state_s *state, size_t is_key) {
       case 'r':
       case 't':
         /* all valid characters! */
+        offset++;
+        break;
+      case '\'':
+        /* JSON5 allows an escaped single quote */
+        if (!(json_parse_flags_allow_single_quoted_strings & flags_bitset)) {
+          state->error = json_parse_error_invalid_string_escape_sequence;
+          state->offset = offset;
+          return 1;
+        }
         offset++;
         break;
       case 'u':
@@ -977,7 +998,8 @@ int json_get_object_size(struct json_parse_state_s *state,
   if (is_global_object) {
     /* if we found an opening '{' of an object, we actually have a normal JSON
      * object at the root of the DOM... */
-    if (!json_skip_all_skippables(state) && '{' == state->src[state->offset]) {
+    if (!json_skip_all_skippables(state) && state->offset < size &&
+        '{' == state->src[state->offset]) {
       /* . and we don't actually have a global object after all! */
       is_global_object = 0;
     }
@@ -1005,7 +1027,6 @@ int json_get_object_size(struct json_parse_state_s *state,
   do {
     if (!is_global_object) {
       if (json_skip_all_skippables(state)) {
-        state->error = json_parse_error_premature_end_of_buffer;
         --state->recursion;
         return 1;
       }
@@ -1047,7 +1068,6 @@ int json_get_object_size(struct json_parse_state_s *state,
         continue;
       } else {
         if (json_skip_all_skippables(state)) {
-          state->error = json_parse_error_premature_end_of_buffer;
           --state->recursion;
           return 1;
         }
@@ -1062,7 +1082,6 @@ int json_get_object_size(struct json_parse_state_s *state,
     }
 
     if (json_skip_all_skippables(state)) {
-      state->error = json_parse_error_premature_end_of_buffer;
       --state->recursion;
       return 1;
     }
@@ -1086,7 +1105,6 @@ int json_get_object_size(struct json_parse_state_s *state,
     state->offset++;
 
     if (json_skip_all_skippables(state)) {
-      state->error = json_parse_error_premature_end_of_buffer;
       --state->recursion;
       return 1;
     }
@@ -1142,7 +1160,6 @@ int json_get_array_size(struct json_parse_state_s *state) {
 
   while (state->offset < size) {
     if (json_skip_all_skippables(state)) {
-      state->error = json_parse_error_premature_end_of_buffer;
       --state->recursion;
       return 1;
     }
@@ -1175,7 +1192,6 @@ int json_get_array_size(struct json_parse_state_s *state) {
         continue;
       } else {
         if (json_skip_all_skippables(state)) {
-          state->error = json_parse_error_premature_end_of_buffer;
           --state->recursion;
           return 1;
         }
@@ -1200,6 +1216,25 @@ int json_get_array_size(struct json_parse_state_s *state) {
   return 1;
 }
 
+json_weak int json_number_token_matches(const char *number, size_t number_size,
+                                       const char *token, size_t token_size);
+int json_number_token_matches(const char *number, size_t number_size,
+                              const char *token, size_t token_size) {
+  size_t i;
+
+  if (number_size != token_size) {
+    return 0;
+  }
+
+  for (i = 0; i < token_size; i++) {
+    if (number[i] != token[i]) {
+      return 0;
+    }
+  }
+
+  return 1;
+}
+
 json_weak int json_get_number_size(struct json_parse_state_s *state);
 int json_get_number_size(struct json_parse_state_s *state) {
   const size_t flags_bitset = state->flags_bitset;
@@ -1207,14 +1242,31 @@ int json_get_number_size(struct json_parse_state_s *state) {
   const size_t size = state->size;
   int had_leading_digits = 0;
   const char *const src = state->src;
+  size_t hex_offset = offset;
 
   state->dom_size += sizeof(struct json_number_s);
 
+  if ((hex_offset < size) &&
+      (('-' == src[hex_offset]) ||
+       ((json_parse_flags_allow_leading_plus_sign & flags_bitset) &&
+        ('+' == src[hex_offset])))) {
+    hex_offset++;
+  }
+
   if ((json_parse_flags_allow_hexadecimal_numbers & flags_bitset) &&
-      (offset + 1 < size) && ('0' == src[offset]) &&
-      (('x' == src[offset + 1]) || ('X' == src[offset + 1]))) {
-    /* skip the leading 0x that identifies a hexadecimal number. */
-    offset += 2;
+      (hex_offset + 1 < size) && ('0' == src[hex_offset]) &&
+      (('x' == src[hex_offset + 1]) || ('X' == src[hex_offset + 1]))) {
+    /* skip the sign and the 0x that identifies a hexadecimal number. */
+    offset = hex_offset + 2;
+
+    if ((offset >= size) || !(('0' <= src[offset] && src[offset] <= '9') ||
+                              ('a' <= src[offset] && src[offset] <= 'f') ||
+                              ('A' <= src[offset] && src[offset] <= 'F'))) {
+      /* a hexadecimal number must have at least one digit! */
+      state->error = json_parse_error_invalid_number_format;
+      state->offset = offset;
+      return 1;
+    }
 
     /* consume hexadecimal digits. */
     while ((offset < size) && (('0' <= src[offset] && src[offset] <= '9') ||
@@ -1242,40 +1294,20 @@ int json_get_number_size(struct json_parse_state_s *state) {
       const char nan[4] = "NaN";
       const size_t nan_strlen = sizeof(nan) - 1;
 
-      if (offset + inf_strlen < size) {
-        int found = 1;
-        size_t i;
-        for (i = 0; i < inf_strlen; i++) {
-          if (inf[i] != src[offset + i]) {
-            found = 0;
-            break;
-          }
-        }
+      if ((offset <= size) && (inf_strlen <= size - offset) &&
+          json_number_token_matches(src + offset, inf_strlen, inf,
+                                    inf_strlen)) {
+        /* We found our special 'Infinity' keyword! */
+        offset += inf_strlen;
 
-        if (found) {
-          /* We found our special 'Infinity' keyword! */
-          offset += inf_strlen;
+        inf_or_nan = 1;
+      } else if ((offset <= size) && (nan_strlen <= size - offset) &&
+                 json_number_token_matches(src + offset, nan_strlen, nan,
+                                           nan_strlen)) {
+        /* We found our special 'NaN' keyword! */
+        offset += nan_strlen;
 
-          inf_or_nan = 1;
-        }
-      }
-
-      if (offset + nan_strlen < size) {
-        int found = 1;
-        size_t i;
-        for (i = 0; i < nan_strlen; i++) {
-          if (nan[i] != src[offset + i]) {
-            found = 0;
-            break;
-          }
-        }
-
-        if (found) {
-          /* We found our special 'NaN' keyword! */
-          offset += nan_strlen;
-
-          inf_or_nan = 1;
-        }
+        inf_or_nan = 1;
       }
 
       if (inf_or_nan) {
@@ -1285,12 +1317,12 @@ int json_get_number_size(struct json_parse_state_s *state) {
       }
     }
 
-    if (found_sign && !inf_or_nan && (offset < size) &&
-        !('0' <= src[offset] && src[offset] <= '9')) {
+    if (found_sign && !inf_or_nan &&
+        ((offset >= size) || !('0' <= src[offset] && src[offset] <= '9'))) {
       /* check if we are allowing leading '.'. */
       if (!(json_parse_flags_allow_leading_or_trailing_decimal_point &
             flags_bitset) ||
-          ('.' != src[offset])) {
+          (offset >= size) || ('.' != src[offset])) {
         /* a leading '-' must be immediately followed by any digit! */
         state->error = json_parse_error_invalid_number_format;
         state->offset = offset;
@@ -1386,6 +1418,14 @@ number_parsed:
       state->error = json_parse_error_invalid_number_format;
       state->offset = offset;
       return 1;
+    case '/':
+      if (json_parse_flags_allow_c_style_comments & flags_bitset) {
+        break;
+      }
+
+      state->error = json_parse_error_invalid_number_format;
+      state->offset = offset;
+      return 1;
     default:
       state->error = json_parse_error_invalid_number_format;
       state->offset = offset;
@@ -1423,7 +1463,6 @@ int json_get_value_size(struct json_parse_state_s *state,
     return json_get_object_size(state, /* is_global_object = */ 1);
   } else {
     if (json_skip_all_skippables(state)) {
-      state->error = json_parse_error_premature_end_of_buffer;
       return 1;
     }
 
@@ -1590,6 +1629,9 @@ void json_parse_string(struct json_parse_state_s *state,
       case '"':
         data[bytes_written++] = '"';
         break;
+      case '\'':
+        data[bytes_written++] = '\'';
+        break;
       case '\\':
         data[bytes_written++] = '\\';
         break;
@@ -1703,7 +1745,7 @@ void json_parse_object(struct json_parse_state_s *state, int is_global_object,
     /* if we skipped some whitespace, and then found an opening '{' of an. */
     /* object, we actually have a normal JSON object at the root of the DOM...
      */
-    if ('{' == src[state->offset]) {
+    if (state->offset < size && '{' == src[state->offset]) {
       /* . and we don't actually have a global object after all! */
       is_global_object = 0;
     }
@@ -1929,8 +1971,20 @@ void json_parse_number(struct json_parse_state_s *state,
   number->number = data;
 
   if (json_parse_flags_allow_hexadecimal_numbers & flags_bitset) {
-    if ((offset + 1 < size) && ('0' == src[offset]) &&
-        (('x' == src[offset + 1]) || ('X' == src[offset + 1]))) {
+    size_t hex_offset = offset;
+
+    if ((hex_offset < size) &&
+        (('-' == src[hex_offset]) || ('+' == src[hex_offset]))) {
+      hex_offset++;
+    }
+
+    if ((hex_offset + 1 < size) && ('0' == src[hex_offset]) &&
+        (('x' == src[hex_offset + 1]) || ('X' == src[hex_offset + 1]))) {
+      if (offset < hex_offset) {
+        /* copy the sign. */
+        data[bytes_written++] = src[offset++];
+      }
+
       /* consume hexadecimal digits. */
       while ((offset < size) &&
              (('0' <= src[offset] && src[offset] <= '9') ||
@@ -1977,23 +2031,21 @@ void json_parse_number(struct json_parse_state_s *state,
     const size_t inf_strlen = 8; /* = strlen("Infinity");. */
     const size_t nan_strlen = 3; /* = strlen("NaN");. */
 
-    if (offset + inf_strlen < size) {
-      if ('I' == src[offset]) {
-        size_t i;
-        /* We found our special 'Infinity' keyword! */
-        for (i = 0; i < inf_strlen; i++) {
-          data[bytes_written++] = src[offset++];
-        }
+    if ((offset <= size) && (inf_strlen <= size - offset) &&
+        json_number_token_matches(src + offset, inf_strlen, "Infinity",
+                                  inf_strlen)) {
+      size_t i;
+      /* We found our special 'Infinity' keyword! */
+      for (i = 0; i < inf_strlen; i++) {
+        data[bytes_written++] = src[offset++];
       }
-    }
-
-    if (offset + nan_strlen < size) {
-      if ('N' == src[offset]) {
-        size_t i;
-        /* We found our special 'NaN' keyword! */
-        for (i = 0; i < nan_strlen; i++) {
-          data[bytes_written++] = src[offset++];
-        }
+    } else if ((offset <= size) && (nan_strlen <= size - offset) &&
+               json_number_token_matches(src + offset, nan_strlen, "NaN",
+                                         nan_strlen)) {
+      size_t i;
+      /* We found our special 'NaN' keyword! */
+      for (i = 0; i < nan_strlen; i++) {
+        data[bytes_written++] = src[offset++];
       }
     }
   }
@@ -2148,9 +2200,10 @@ json_parse_ex(const void *src, size_t src_size, size_t flags_bitset,
       &state, (int)(json_parse_flags_allow_global_object & state.flags_bitset));
 
   if (0 == input_error) {
-    json_skip_all_skippables(&state);
-
-    if (state.offset != state.size) {
+    if (json_skip_all_skippables(&state) &&
+        json_parse_error_unterminated_comment == state.error) {
+      input_error = 1;
+    } else if (state.offset != state.size) {
       /* our parsing didn't have an error, but there are characters remaining in
        * the input that weren't part of the JSON! */
 
@@ -2550,9 +2603,15 @@ int json_write_get_number_size(const struct json_number_s *number,
                                size_t *size) {
   json_uintmax_t parsed_number;
   size_t i;
+  size_t sign = 0;
 
-  if (number->number_size >= 2) {
-    switch (number->number[1]) {
+  if ((number->number_size >= 1) &&
+      (('-' == number->number[0]) || ('+' == number->number[0]))) {
+    sign = 1;
+  }
+
+  if (number->number_size >= sign + 2) {
+    switch (number->number[sign + 1]) {
     default:
       break;
     case 'x':
@@ -2560,7 +2619,7 @@ int json_write_get_number_size(const struct json_number_s *number,
       /* the number is a json_parse_flags_allow_hexadecimal_numbers hexadecimal
        * so we have to do extra work to convert it to a non-hexadecimal for JSON
        * output. */
-      parsed_number = json_strtoumax(number->number, json_null, 0);
+      parsed_number = json_strtoumax(number->number + sign, json_null, 0);
 
       i = 0;
 
@@ -2568,6 +2627,11 @@ int json_write_get_number_size(const struct json_number_s *number,
         parsed_number /= 10;
         i++;
       } while (0 != parsed_number);
+
+      /* a leading '-' is kept in the JSON output. */
+      if ('-' == number->number[0]) {
+        i++;
+      }
 
       *size += i;
       return 0;
@@ -2586,20 +2650,9 @@ int json_write_get_number_size(const struct json_number_s *number,
   /* check if we have infinity. */
   if ((i < number->number_size) && ('I' == number->number[i])) {
     const char *inf = "Infinity";
-    size_t k;
 
-    for (k = i; k < number->number_size; k++) {
-      const char c = *inf++;
-
-      /* Check if we found the Infinity string! */
-      if ('\0' == c) {
-        break;
-      } else if (c != number->number[k]) {
-        break;
-      }
-    }
-
-    if ('\0' == *inf) {
+    if (json_number_token_matches(number->number + i,
+                                  number->number_size - i, inf, 8)) {
       /* Inf becomes 1.7976931348623158e308 because JSON can't support it. */
       *size += 22;
 
@@ -2607,28 +2660,17 @@ int json_write_get_number_size(const struct json_number_s *number,
       if ('-' == number->number[0]) {
         *size += 1;
       }
-    }
 
-    return 0;
+      return 0;
+    }
   }
 
   /* check if we have nan. */
   if ((i < number->number_size) && ('N' == number->number[i])) {
     const char *nan = "NaN";
-    size_t k;
 
-    for (k = i; k < number->number_size; k++) {
-      const char c = *nan++;
-
-      /* Check if we found the NaN string! */
-      if ('\0' == c) {
-        break;
-      } else if (c != number->number[k]) {
-        break;
-      }
-    }
-
-    if ('\0' == *nan) {
+    if (json_number_token_matches(number->number + i,
+                                  number->number_size - i, nan, 3)) {
       /* NaN becomes 1 because JSON can't support it. */
       *size += 1;
 
@@ -2790,9 +2832,15 @@ json_weak char *json_write_number(const struct json_number_s *number,
 char *json_write_number(const struct json_number_s *number, char *data) {
   json_uintmax_t parsed_number, backup;
   size_t i;
+  size_t sign = 0;
 
-  if (number->number_size >= 2) {
-    switch (number->number[1]) {
+  if ((number->number_size >= 1) &&
+      (('-' == number->number[0]) || ('+' == number->number[0]))) {
+    sign = 1;
+  }
+
+  if (number->number_size >= sign + 2) {
+    switch (number->number[sign + 1]) {
     default:
       break;
     case 'x':
@@ -2800,7 +2848,12 @@ char *json_write_number(const struct json_number_s *number, char *data) {
       /* The number is a json_parse_flags_allow_hexadecimal_numbers hexadecimal
        * so we have to do extra work to convert it to a non-hexadecimal for JSON
        * output. */
-      parsed_number = json_strtoumax(number->number, json_null, 0);
+      parsed_number = json_strtoumax(number->number + sign, json_null, 0);
+
+      /* a leading '-' is kept in the JSON output. */
+      if ('-' == number->number[0]) {
+        *data++ = '-';
+      }
 
       /* We need a copy of parsed number twice, so take a backup of it. */
       backup = parsed_number;
@@ -2842,20 +2895,9 @@ char *json_write_number(const struct json_number_s *number, char *data) {
   /* check if we have infinity. */
   if ((i < number->number_size) && ('I' == number->number[i])) {
     const char *inf = "Infinity";
-    size_t k;
 
-    for (k = i; k < number->number_size; k++) {
-      const char c = *inf++;
-
-      /* Check if we found the Infinity string! */
-      if ('\0' == c) {
-        break;
-      } else if (c != number->number[k]) {
-        break;
-      }
-    }
-
-    if ('\0' == *inf++) {
+    if (json_number_token_matches(number->number + i,
+                                  number->number_size - i, inf, 8)) {
       const char *dbl_max;
 
       /* if we had a leading '-' we need to record it in the JSON output. */
@@ -2875,20 +2917,9 @@ char *json_write_number(const struct json_number_s *number, char *data) {
   /* check if we have nan. */
   if ((i < number->number_size) && ('N' == number->number[i])) {
     const char *nan = "NaN";
-    size_t k;
 
-    for (k = i; k < number->number_size; k++) {
-      const char c = *nan++;
-
-      /* Check if we found the NaN string! */
-      if ('\0' == c) {
-        break;
-      } else if (c != number->number[k]) {
-        break;
-      }
-    }
-
-    if ('\0' == *nan++) {
+    if (json_number_token_matches(number->number + i,
+                                  number->number_size - i, nan, 3)) {
       /* NaN becomes 0 because JSON can't support it. */
       *data++ = '0';
       return data;
