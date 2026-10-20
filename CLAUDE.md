@@ -42,9 +42,11 @@ Windows (MSVC, no make):
 
 `.github/workflows/test.yml` runs `make all` and `make all-clang` on `ubuntu-latest`, then fails if `git diff` shows that the committed `include/hcbudoux.h` differs from the regenerated one. It does not use `run.bat`.
 
-On Windows, the Makefiles run in WSL (`wsl -e make all`). Use `wsl -e`, not `wsl -- bash -lc '...'`: the latter goes through WSL's default shell, which expands `$?` and similar before bash sees them. `scripts/wsl-setup.sh` installs the build tools plus Docker and act (needs sudo); `scripts/act.sh` runs the workflow locally with act. act's image only approximates GitHub's runner.
+On Windows, the Makefiles run in WSL (`wsl -e make all`). Use `wsl -e`, not `wsl -- bash -lc '...'`: the latter goes through WSL's default shell, which expands `$?` and similar before bash sees them. `scripts/wsl-setup.sh` installs the build tools plus Docker and act (needs sudo); `scripts/act.py` runs `test.yml` locally with act. act's image only approximates GitHub's runner.
 
-Releases: the version lives in the `hcbudoux_version_*` enum in `codegen/hcbudoux.template.h` (`scripts/version.sh` prints it). `scripts/release.sh` tags a clean `main` that matches `origin/main` as `v<version>` and pushes the tag; `.github/workflows/release.yml` checks the tag against the header, runs `make all`, and creates the GitHub Release with `include/hcbudoux.h` attached. `RELEASE.md` lists the steps.
+Helper scripts are Python 3 (3.10+, standard library only) so the same file runs on Linux and Windows: `python3 scripts/x.py` on Linux, `python scripts\x.py` on Windows (on this machine `python3` on Windows is the Microsoft Store stub). The exceptions are `scripts/wsl-setup.sh` (apt, Ubuntu only) and the MSVC `.bat` build scripts. `scripts/ci-status.py` prints the GitHub Actions results of a commit; exit status 0 = all succeeded, 1 = a run failed, 2 = no completed result, 3 = API error.
+
+Releases: the version lives in the `hcbudoux_version_*` enum in `codegen/hcbudoux.template.h` (`scripts/version.py` prints it). `scripts/release.py` tags a clean `main` that matches `origin/main` as `v<version>` and pushes the tag; `.github/workflows/release.yml` checks the tag against the header, runs `make all`, checks that the header is up to date, and creates the GitHub Release with `include/hcbudoux.h` attached. `test.yml` runs on branch pushes and pull requests, not on tags. `RELEASE.md` lists the steps.
 
 ## Licensing
 
@@ -119,7 +121,7 @@ If none are defined, all models are included. `HCBUDOUX_DONT_INCLUDE_STD` skips 
 BudouX and json.h are vendored and pinned by commit hash in `third_party/budoux_hash.txt` and `third_party/json_h_hash.txt`. Procedure (see commits "Bumped budoux to vX.Y.Z"):
 
 1. Put the new commit hash in the hash file.
-2. Run `third_party/download.sh` (or `download.bat`). It re-fetches only the model JSONs, `json.h`, and LICENSE files.
+2. Run `third_party/download.py`. It re-fetches only the model JSONs, `json.h`, and LICENSE files, staging the archives in `_tmp/staging`.
 3. Run codegen, then the tests. Fix expectations in `test/test1.c` if a model changed.
 4. Update the BudouX version row in the README table.
 

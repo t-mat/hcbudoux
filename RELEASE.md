@@ -4,7 +4,7 @@ Release procedure
 A release is a `v<MAJOR>.<MINOR>.<PATCH>` tag on `main`.
 Pushing the tag runs `.github/workflows/release.yml`, which creates the GitHub Release with `include/hcbudoux.h` attached.
 
-On Windows, run the shell and Python commands below through WSL (`wsl -e sh ...`, `wsl -e python3 ...`, `wsl -e make ...`).
+The commands are written for Linux. On Windows, run `make` through WSL (`wsl -e make ...`) and the Python scripts with `python` instead of `python3`.
 
 
 1. Update the version
@@ -15,7 +15,7 @@ Edit the `hcbudoux_version_*` enum in `codegen/hcbudoux.template.h`, then regene
 ```sh
 make all
 make all-clang
-sh scripts/version.sh       # prints the new version, e.g. 0.10.1
+python3 scripts/version.py  # prints the new version, e.g. 0.10.1
 ```
 
 If the release updates BudouX, follow "Updating third-party dependencies" in `CLAUDE.md` first, including the BudouX version row in `README.md`.
@@ -45,10 +45,10 @@ Exit status 1 means a run failed, 2 means no completed result, 3 means the GitHu
 -----------------------
 
 ```sh
-sh scripts/release.sh
+python3 scripts/release.py
 ```
 
-`scripts/release.sh` stops unless `main` is checked out, the working tree is clean, `HEAD` equals `origin/main`, and the tag does not exist yet.
+`scripts/release.py` stops unless `main` is checked out, the working tree is clean, `HEAD` equals `origin/main`, and the tag does not exist yet.
 It then creates the annotated tag `v<version>` and pushes it.
 
 
@@ -59,10 +59,9 @@ It then creates the annotated tag `v<version>` and pushes it.
 python3 scripts/ci-status.py --wait
 ```
 
-The tag points at the commit that step 3 already checked, so `--wait` can return before the runs for the tag appear.
+The tag points at the commit that step 3 already checked, so `--wait` can return before the `release` run appears.
 Run it again until the list includes a `release` run and that run has completed.
-The tag push also starts another `test` run, because `test.yml` runs on every push.
-The `release` run must succeed. It fails if the tag does not match the version in `include/hcbudoux.h`.
+The `release` run must succeed. It fails if the tag does not match the version in `include/hcbudoux.h`, or if the regenerated header differs from the committed one.
 Then check that https://github.com/t-mat/hcbudoux/releases has `v<version>` with `hcbudoux.h` attached.
 
 

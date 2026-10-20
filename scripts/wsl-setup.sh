@@ -4,8 +4,9 @@
 #   clang/clang++          : make all-clang
 #   clang-format/clang-tidy: make clang-format / make clang-tidy
 #   git                    : header up-to-date check (git diff)
-#   curl, unzip            : third_party/download.sh
-#   docker.io, act         : scripts/act.sh (run .github/workflows locally)
+#   python3                : scripts/*.py, third_party/download.py
+#   docker.io, act         : scripts/act.py (run .github/workflows/test.yml locally)
+#   curl                   : the act installer below
 set -eu
 
 sudo apt-get update
@@ -15,8 +16,8 @@ sudo apt-get install -y \
   clang-format \
   clang-tidy \
   git \
+  python3 \
   curl \
-  unzip \
   docker.io
 
 # Let the current user talk to the Docker daemon without sudo (effective from the next login).

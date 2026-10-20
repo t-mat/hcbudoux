@@ -187,16 +187,21 @@ Shortcut for development tasks
 
 `run.bat` accepts several targets and runs them in order, e.g. `.\run.bat codegen test`.
 
-| Task                                  | Linux / WSL                   | Windows                               |
-| ---                                   | ---                           | ---                                   |
-| Install build tools, Docker and act   | `sh scripts/wsl-setup.sh`     | `wsl -e sh scripts/wsl-setup.sh`      |
-| Run CI locally with [act]             | `sh scripts/act.sh`           | `wsl -e sh scripts/act.sh`            |
-| Tag `v<version>` and release          | `sh scripts/release.sh`       | `wsl -e sh scripts/release.sh`        |
+| Task                                  | Linux / WSL                           | Windows                                   |
+| ---                                   | ---                                   | ---                                       |
+| Install build tools, Docker and act   | `sh scripts/wsl-setup.sh`             | `wsl -e sh scripts/wsl-setup.sh`          |
+| Run CI locally with [act]             | `python3 scripts/act.py`              | `wsl -e python3 scripts/act.py`           |
+| Print the version                     | `python3 scripts/version.py`          | `python scripts\version.py`               |
+| Show CI results of `HEAD`             | `python3 scripts/ci-status.py`        | `python scripts\ci-status.py`             |
+| Tag `v<version>` and release          | `python3 scripts/release.py`          | `python scripts\release.py`               |
 
 [act]: https://github.com/nektos/act
 
+The Python scripts need Python 3.10 or later and run on both Linux and Windows.
+`scripts/wsl-setup.sh` uses apt and is for Ubuntu (WSL) only. On Windows, act and Docker are used from WSL.
+
 CI (`.github/workflows/test.yml`) runs `make all` and `make all-clang` on Linux and fails if the committed `include/hcbudoux.h` is not up to date.
-`scripts/release.sh` tags `main` with the version in `include/hcbudoux.h`; `.github/workflows/release.yml` then creates the GitHub Release.
+`scripts/release.py` tags `main` with the version in `include/hcbudoux.h`; `.github/workflows/release.yml` then creates the GitHub Release. See [RELEASE.md](RELEASE.md).
 
 
 Third party libraries
@@ -214,11 +219,11 @@ The following files contain the target commit hash of each library.
 | BudouX                | `third_party/budoux_hash.txt` |
 | json.h                | `third_party/json_h_hash.txt` |
 
-You can download them with the following scripts
+You can download them with the following script
 
-| Task                                  | Linux                         | Windows                       |
-| ---                                   | ---                           | ---                           |
-| Download third party libraries        | `./third_party/download.sh`   | `.\third_party\download.bat`  |
+| Task                                  | Linux                                 | Windows                                   |
+| ---                                   | ---                                   | ---                                       |
+| Download third party libraries        | `python3 third_party/download.py`     | `python third_party\download.py`          |
 
 
 Alternatives

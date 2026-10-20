@@ -14,10 +14,12 @@ jobs:
       - uses: actions/checkout@v5
       - name: Check that the tag matches the version in include/hcbudoux.h
         run: |
-          v=$(sh scripts/version.sh)
+          v=$(python3 scripts/version.py)
           test "${GITHUB_REF_NAME}" = "v${v}" || { echo "tag ${GITHUB_REF_NAME} != v${v}"; exit 1; }
       - name: make all
         run: make all
+      - name: Check that include/hcbudoux.h is up to date
+        run: git diff --exit-code -- include/hcbudoux.h
       - name: Create GitHub Release with include/hcbudoux.h
         env:
           GH_TOKEN: ${{ github.token }}
