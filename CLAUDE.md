@@ -44,7 +44,7 @@ Windows (MSVC, no make):
 
 On Windows, the Makefiles run in WSL (`wsl -e make all`). Use `wsl -e`, not `wsl -- bash -lc '...'`: the latter goes through WSL's default shell, which expands `$?` and similar before bash sees them. `scripts/wsl-setup.sh` installs the build tools plus Docker and act (needs sudo); `scripts/act.sh` runs the workflow locally with act. act's image only approximates GitHub's runner.
 
-Releases: the version lives in the `hcbudoux_version_*` enum in `codegen/hcbudoux.template.h` (`scripts/version.sh` prints it). `scripts/release.sh` tags a clean `main` that matches `origin/main` as `v<version>` and pushes the tag; `.github/workflows/release.yml` checks the tag against the header, runs `make all`, and creates the GitHub Release with `include/hcbudoux.h` attached.
+Releases: the version lives in the `hcbudoux_version_*` enum in `codegen/hcbudoux.template.h` (`scripts/version.sh` prints it). `scripts/release.sh` tags a clean `main` that matches `origin/main` as `v<version>` and pushes the tag; `.github/workflows/release.yml` checks the tag against the header, runs `make all`, and creates the GitHub Release with `include/hcbudoux.h` attached. `RELEASE.md` lists the steps.
 
 ## Licensing
 
