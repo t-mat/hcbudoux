@@ -244,8 +244,8 @@ See https://creativecommons.org/publicdomain/zero/1.0/ for CC0-1.0 legalcode.
 
 Third party parts keep their own licenses:
 
-| Part                                              | Source                                            | License                                       |
-| ---                                               | ---                                               | ---                                           |
-| Model tables in `include/hcbudoux.h`              | [BudouX](https://github.com/google/budoux) models | Apache-2.0 (`third_party/budoux/LICENSE`)     |
-| `examples/east_asian_width.h`                     | Unicode `EastAsianWidth.txt`                      | Unicode-3.0 (notice in the file)              |
-| `third_party/json.h/json.h` (codegen only)        | [json.h](https://github.com/sheredom/json.h)      | Unlicense (`third_party/json.h/LICENSE`)      |
+| Part                                              | Source                                            | License                                                       |
+| ---                                               | ---                                               | ---                                                           |
+| Model tables in `include/hcbudoux.h`              | [BudouX](https://github.com/google/budoux) models | Apache-2.0 (full text at the end of `include/hcbudoux.h`)     |
+| `examples/east_asian_width.h`                     | Unicode `EastAsianWidth.txt`                      | Unicode-3.0 (notice in the file)                              |
+| `third_party/json.h/json.h` (codegen only)        | [json.h](https://github.com/sheredom/json.h)      | Unlicense (`third_party/json.h/LICENSE`)                      |
