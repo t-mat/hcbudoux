@@ -154,18 +154,18 @@ If none of the symbols are defined, `hcbudoux.h` includes all available models.
 
 hcbudoux uses the following BudouX models, C standards, headers, types and constants:
 
-| -                                     | -                                                                |
-| ---                                   | ---                                                              |
-| C language standard                   | C11                                                              |
-| Prefix of C-language symbols          | `hcbudoux_`                                                      |
-| Prefix of C-preprocessor symbols      | `HCBUDOUX_`                                                      |
-| BudouX version                        | [`v0.9.3`](https://github.com/google/budoux/releases/tag/v0.9.3) |
-| BudouX natural language models        | ja, ja_knbc, th, zh-hans, zh-hant                                |
-| Standard header dependencies          | `<stdint.h>` <br> `<stdbool.h>`                                  |
-| `<stdint.h>` types in use             | `uint8_t`, `uint32_t`, `uint64_t`                                |
-| `<stdbool.h>` types in use            | `bool`, `true`, `false`                                          |
-| Standard library binary dependencies  |  No dependency.                                                  |
-| External resource allocation          |  No heap memory allocation, I/O, callback.                       |
+| -                                     | -                                                                  |
+| ---                                   | ---                                                                |
+| C language standard                   | C11                                                                |
+| Prefix of C-language symbols          | `hcbudoux_`                                                        |
+| Prefix of C-preprocessor symbols      | `HCBUDOUX_`                                                        |
+| BudouX version                        | [`v0.10.0`](https://github.com/google/budoux/releases/tag/v0.10.0) |
+| BudouX natural language models        | ja, ja_knbc, th, zh-hans, zh-hant                                  |
+| Standard header dependencies          | `<stdint.h>` <br> `<stdbool.h>`                                    |
+| `<stdint.h>` types in use             | `uint8_t`, `uint32_t`, `uint64_t`                                  |
+| `<stdbool.h>` types in use            | `bool`, `true`, `false`                                            |
+| Standard library binary dependencies  |  No dependency.                                                    |
+| External resource allocation          |  No heap memory allocation, I/O, callback.                         |
 
 [doc/codegen.md](doc/codegen.md) describes the details of `codegen` and `hcbudoux.h`.
 
